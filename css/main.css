@@ -14,9 +14,6 @@
   --bg-soft:#0b080c;
   --surface:#130f14;
   --surface-2:#1b161b;
-  /* 浅色反相段的纸面（三端下载那一段用） */
-  --paper:#f6f2f3;
-
   /* ---- 描边：不再是单一白线，改成分层 ----
      --line       极轻，用于大面积容器分割
      --line-strong 悬停/强调
@@ -728,57 +725,6 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
 .resmock__hint{font-size:11px;color:var(--text-3)}
 
 /* ================= 全平台 ================= */
-/* ---- 浅色反相段 ----
-   整页从头到尾 100% 深色，翻到底也没有一次「换口气」的机会，读起来是平的。
-   三端下载这一段翻成纸面浅色：卡片 / 文字 / 描边 / 阴影全部走变量反相，
-   深浅两段共用同一套组件代码，不复制一份卡片样式。
-
-   ⚠️ 反相不是「把颜色反过来」就完事，有两处必须单独处理：
-   1) 主色在浅底上要压深 —— #ff2d55 压在纸面上只有 3.25:1（不达 AA），
-      换成 #c40f3c 是 5.39:1；图标里的绿 #30d158 在浅底上只有 1.75:1，
-      蓝 #0a84ff 是 3.15:1，都得压深，否则在浅底上糊成一团。
-   2) .dev 里有几处**硬编码的白色半透明**（特性标签、体积标签、顶部环境光），
-      浅底上会彻底消失，必须逐条重写。 */
-.invert{
-  --bg:var(--paper);
-  --surface:#f1ecee;
-  --surface-2:#fbf8f9;
-  --text:#17131a;
-  --text-2:#574f5a;
-  --text-3:#665e6a;
-  --line:rgba(23,19,26,.11);
-  --line-strong:rgba(23,19,26,.2);
-  --line-top:rgba(255,255,255,.9);
-  --line-bot:rgba(23,19,26,.05);
-  --sh-2:0 1px 2px rgba(60,26,40,.05),0 18px 40px -18px rgba(60,26,40,.22);
-  --sh-3:0 2px 4px rgba(60,26,40,.06),0 34px 60px -28px rgba(60,26,40,.3);
-  --accent:#c40f3c;
-  --accent-2:#c2410c;
-  /* ⚠️ 必须显式写一次 color：只重声明 --text 是**没用**的。
-     自定义属性不参与「继承值的重新解析」—— .dev__name 这类没有自己 color 的元素，
-     继承的是 body 上**已经解析成** rgb(247,243,245) 的那个值，
-     于是浅底上出现白字（实测对比度 1.01，等于隐形）。 */
-  color:var(--text);
-  background:linear-gradient(180deg,#faf6f7 0%,var(--paper) 100%);
-  /* ⚠️ 必须再单独给一次 background-color：
-     `background:linear-gradient(...)` 这个简写会把 background-color **重置成 transparent**，
-     于是这一段在辅助技术/取色工具眼里是「透明的」，对比度无从算起。 */
-  background-color:var(--paper);
-}
-/* 卡片顶部那道环境光在浅底上要反过来 —— 是「更亮」而不是「更白」 */
-.invert .dev::before{
-  background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(255,255,255,.95),transparent 72%);
-}
-.invert .dev:hover{background:linear-gradient(178deg,#fffdfd 0%,var(--surface) 48%)}
-/* 硬编码白底的三处，浅底上重写 */
-.invert .dev__feat li{
-  background:rgba(23,19,26,.035);border-color:rgba(23,19,26,.09);color:var(--text-2);
-}
-.invert .dev__meta{background:rgba(23,19,26,.04);border-color:rgba(23,19,26,.09)}
-/* 深底上鲜亮的绿 / 蓝图标压到浅底上对比度不够，压深 */
-.invert .dev__art--pc{color:#0a5fc0}
-.invert .dev__art--tv{color:#137a34}
-
 .devices{padding:120px 0}
 .dev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 /* 显式三列别名：与 --2 对称，避免将来误改基础网格 */

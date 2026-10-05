@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>WebDAV 同步怎么配 · 坚果云 / 群晖 / OpenList — 短剧之家</title>
+<meta name="description" content="短剧之家 WebDAV 播放记录同步配置教程：坚果云应用密码怎么生成、服务器地址账号密码怎么填，群晖与 OpenList 的地址格式，以及连不上时的排查清单。">
+<meta name="keywords" content="短剧之家,WebDAV,同步教程,坚果云,应用密码,群晖,OpenList,播放记录同步">
+<meta name="author" content="短剧之家">
+<meta name="robots" content="index,follow">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<link rel="canonical" href="https://jackherex.github.io/miniflix/webdav.html">
+
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="mask-icon" href="assets/logo.svg" color="#ff2d55">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="短剧之家">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:url" content="https://jackherex.github.io/miniflix/webdav.html">
+<meta property="og:title" content="WebDAV 同步怎么配 · 坚果云 / 群晖 / OpenList — 短剧之家">
+<meta property="og:description" content="一分钟生成应用密码，三个字段填完，手机和电脑的播放进度就自动对齐。记录只写进你自己的盘。">
+<meta property="og:image" content="https://jackherex.github.io/miniflix/assets/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WebDAV 同步怎么配 — 短剧之家">
+<meta name="twitter:description" content="一分钟生成应用密码，三个字段填完，手机和电脑的播放进度就自动对齐。">
+<meta name="twitter:image" content="https://jackherex.github.io/miniflix/assets/og-cover.jpg">
+
+<!-- 面包屑结构化数据：让搜索引擎知道这是官网下的一个子页面 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "短剧之家", "item": "https://jackherex.github.io/miniflix/" },
+    { "@type": "ListItem", "position": 2, "name": "WebDAV 同步教程", "item": "https://jackherex.github.io/miniflix/webdav.html" }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="css/main.css?v=26">
+<link rel="stylesheet" href="css/webdav.css?v=2">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- 教程页用自己的精简页头：不依赖 app.js，移动端也不需要汉堡菜单 -->
+<header class="tut-nav">
+  <div class="wrap tut-nav__inner">
+    <a class="nav__brand" href="index.html" aria-label="短剧之家首页">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+        <path d="M8.5 5.2v13.6c0 .9 1 1.4 1.7.9l10.3-6.8c.7-.4.7-1.4 0-1.8L10.2 4.3c-.7-.5-1.7 0-1.7.9Z" fill="currentColor"/>
+        <path d="M3.6 5.8v12.4c0 .8.9 1.3 1.6.9l3.2-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>
+      </svg>
+      <span>短剧之家</span>
+    </a>
+    <span class="tut-nav__sep" aria-hidden="true">/</span>
+    <span class="tut-nav__here">WebDAV 同步教程</span>
+    <a class="btn btn--ghost btn--sm" href="index.html">返回首页</a>
+  </div>
+</header>
+
+<main class="tut">
+
+  <!-- ============ 页头 ============ -->
+  <section class="tut-hero">
+    <div class="tut-hero__glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="tut-hero__eyebrow"><i>教程</i>播放记录同步</p>
+      <h1 class="tut-hero__title">三分钟，<br>把进度接回你自己的盘</h1>
+      <p class="tut-hero__sub">
+        手机上看到第 17 集，电脑打开接着播。不用注册账号，不用登录，
+        记录只写进你自己的 WebDAV —— 我们不经手，也看不到。
+      </p>
+      <div class="tut-hero__cta">
+        <a class="btn btn--primary" href="#nuts">从坚果云开始</a>
+        <a class="btn btn--text" href="#others">
+          我用群晖 / OpenList
+          <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 先记住三项 ============ -->
+  <section class="tut-sec" id="fields">
+    <div class="wrap">
+      <h2 class="tut-h2">先记住这三个字段</h2>
+      <p class="tut-lead">
+        不管你用哪家服务，App 里「设置 → 播放记录同步」要填的都是这三样。
+        照着下面填，基本不会出错。
+      </p>
+
+      <div class="fields">
+        <div class="field">
+          <span class="field__k">服务器地址</span>
+          <div class="field__row">
+            <code class="field__v" id="davUrl">https://dav.jianguoyun.com/dav/</code>
+            <button class="field__copy" type="button" data-copy="davUrl">复制</button>
+          </div>
+          <p class="field__note">坚果云的固定地址，结尾那个斜杠别丢</p>
+        </div>
+
+        <div class="field">
+          <span class="field__k">账号</span>
+          <div class="field__row">
+            <code class="field__v">你注册坚果云用的邮箱或手机号</code>
+          </div>
+          <p class="field__note">就是登录网页端时填的那个</p>
+        </div>
+
+        <div class="field">
+          <span class="field__k">密码</span>
+          <div class="field__row">
+            <code class="field__v">在坚果云里生成的「应用密码」</code>
+          </div>
+          <p class="field__note field__note--warn">不是你的登录密码，下一步就讲怎么拿</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 坚果云四步 ============ -->
+  <section class="tut-sec" id="nuts">
+    <div class="wrap">
+      <h2 class="tut-h2">用坚果云接上（免费，最省事）</h2>
+      <p class="tut-lead">
+        坚果云免费版就能用 WebDAV，容量够放播放记录。
+        你要做的只有一件事：生成一串<b>应用密码</b>。
+      </p>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step__no">01</span>
+          <div class="step__body">
+            <h3 class="step__t">登录网页端，进「安全选项」</h3>
+            <p class="step__p">
+              打开 <a href="https://www.jianguoyun.com/" target="_blank" rel="noopener">jianguoyun.com</a>
+              登录账号，点右上角的账户名，依次进 <b>账户信息</b> → <b>安全选项</b>。
+            </p>
+            <div class="crumb">
+              <span>账户信息</span><i aria-hidden="true">›</i><span>安全选项</span>
+            </div>
+          </div>
+        </li>
+
+        <li class="step">
+          <span class="step__no">02</span>
+          <div class="step__body">
+            <h3 class="step__t">添加应用密码</h3>
+            <p class="step__p">
+              在「安全选项」里找到 <b>第三方应用管理</b>，点 <b>添加应用密码</b>，
+              名字随便起（比如「短剧之家」），然后点生成。
+            </p>
+            <div class="crumb">
+              <span>安全选项</span><i aria-hidden="true">›</i><span>第三方应用管理</span><i aria-hidden="true">›</i><span>添加应用密码</span>
+            </div>
+            <div class="note note--warn">
+              <b>这串密码只在生成时显示一次</b>，关掉窗口就再也看不到了 ——
+              当场复制下来。看不到就删掉重新生成一个，不影响已有数据。
+              另外，它是应用专用密码，<b>不等于你的登录密码</b>，填错了一定连不上。
+            </div>
+          </div>
+        </li>
+
+        <li class="step">
+          <span class="step__no">03</span>
+          <div class="step__body">
+            <h3 class="step__t">回到 App，把三项填进去</h3>
+            <p class="step__p">
+              打开短剧之家 → <b>设置 → 播放记录同步</b>，
+              把上面三项填好保存。手机和电脑用同一组配置即可。
+            </p>
+            <div class="crumb">
+              <span>设置</span><i aria-hidden="true">›</i><span>播放记录同步</span>
+            </div>
+          </div>
+        </li>
+
+        <li class="step">
+          <span class="step__no">04</span>
+          <div class="step__body">
+            <h3 class="step__t">看一眼是不是真的通了</h3>
+            <p class="step__p">
+              手机上随便看一集，退出去；再打开电脑版，如果它从同一个位置接着播，
+              就说明通了。两端同时看过同一集时，自动保留最新的那个进度。
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <!-- 官方截图：默认收起。details 收起时里面不渲染，配合 loading=lazy，
+           没点开就一张图都不下载 —— 教程页首屏不会先糊一屏图。 -->
+      <details class="shots" id="shots">
+        <summary>
+          <span class="shots__t">看坚果云官方截图</span>
+          <span class="shots__n">6 张</span>
+        </summary>
+
+        <div class="shots__tip">
+          下面这些截图引自
+          <a href="https://help.jianguoyun.com/?p=2064" target="_blank" rel="noopener">坚果云帮助中心</a>，
+          按原文顺序排列，点图片可以看原尺寸。界面会随版本变化，
+          <b>操作以上面的文字步骤为准</b>，图只是拿来对照着看。
+          安卓端的入口是「设置 → 第三方应用管理」，跟 iOS 一样。
+        </div>
+
+        <div class="shots__grid">
+          <figure>
+            <a href="assets/webdav/1.png" target="_blank" rel="noopener">
+              <img src="assets/webdav/1.png" width="425" height="213" loading="lazy"
+                   alt="坚果云网页端右上角账户名菜单，其中的账户信息入口">
+            </a>
+            <figcaption>网页端 · 账户信息 → 安全选项</figcaption>
+          </figure>
+
+          <figure>
+            <a href="assets/webdav/22.png" target="_blank" rel="noopener">
+              <img src="assets/webdav/22.png" width="704" height="478" loading="lazy"
+                   alt="坚果云安全选项页面中的第三方应用管理区域">
+            </a>
+            <figcaption>网页端 · 安全选项 → 第三方应用管理 → 添加应用密码</figcaption>
+          </figure>
+
+          <figure>
+            <a href="assets/webdav/1-3.png" target="_blank" rel="noopener">
+              <img src="assets/webdav/1-3.png" width="1021" height="556" loading="lazy"
+                   alt="坚果云添加应用密码、生成密码的界面">
+            </a>
+            <figcaption>网页端 · 起个名字，生成应用密码</figcaption>
+          </figure>
+
+          <figure>
+            <a href="assets/webdav/41.png" target="_blank" rel="noopener">
+              <img src="assets/webdav/41.png" width="430" height="102" loading="lazy"
+                   alt="坚果云 iOS 客户端设置页里的第三方应用管理入口">
+            </a>
+            <figcaption>移动端（iOS）· 设置 → 第三方应用管理</figcaption>
+          </figure>
+
+          <figure>
+            <a href="assets/webdav/5.png" target="_blank" rel="noopener">
+              <img src="assets/webdav/5.png" width="336" height="592" loading="lazy"
+                   alt="坚果云 iOS 客户端的第三方应用管理界面">
+            </a>
+            <figcaption>移动端（iOS）· 应用密码管理界面</figcaption>
+          </figure>
+
+          <figure>
+            <a href="assets/webdav/6.png" target="_blank" rel="noopener">
+              <img src="assets/webdav/6.png" width="327" height="406" loading="lazy"
+                   alt="在第三方应用里填写服务器地址、账号与应用密码的界面">
+            </a>
+            <figcaption>移动端（iOS）· 在应用里填地址、账号、应用密码</figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <p class="tut-src">
+        参考：
+        <a href="https://help.jianguoyun.com/?p=2064" target="_blank" rel="noopener">坚果云帮助中心 · 第三方应用授权 WebDAV 开启方法</a>
+        （本页截图亦引自该页，版权归坚果云所有）
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 其他服务 ============ -->
+  <section class="tut-sec" id="others">
+    <div class="wrap">
+      <h2 class="tut-h2">用别的盘怎么填</h2>
+      <p class="tut-lead">
+        只要是标准 WebDAV 都能接。下面这些是常见默认值，
+        端口和路径以你自己装的时候为准。
+      </p>
+
+      <div class="tbl" role="table" aria-label="常见 WebDAV 服务对照">
+        <div class="tbl__head" role="row">
+          <span role="columnheader">服务</span>
+          <span role="columnheader">服务器地址</span>
+          <span role="columnheader">账号 / 密码</span>
+        </div>
+        <div class="tbl__row" role="row">
+          <span class="tbl__k" role="cell">坚果云</span>
+          <span class="tbl__v" role="cell"><code>https://dav.jianguoyun.com/dav/</code></span>
+          <span class="tbl__n" role="cell">注册邮箱或手机号 / 应用密码</span>
+        </div>
+        <div class="tbl__row" role="row">
+          <span class="tbl__k" role="cell">群晖 DSM</span>
+          <span class="tbl__v" role="cell"><code>http://192.168.x.x:5005/dav/</code></span>
+          <span class="tbl__n" role="cell">DSM 账号 / 密码。需先在套件中心装并启用「WebDAV Server」，https 走 5006</span>
+        </div>
+        <div class="tbl__row" role="row">
+          <span class="tbl__k" role="cell">OpenList / AList</span>
+          <span class="tbl__v" role="cell"><code>http://你的地址:5244/dav</code></span>
+          <span class="tbl__n" role="cell">你自己在 OpenList 里建的用户名 / 密码</span>
+        </div>
+        <div class="tbl__row" role="row">
+          <span class="tbl__k" role="cell">自建（Nginx / Caddy / Rclone）</span>
+          <span class="tbl__v" role="cell">你自己的地址与端口</span>
+          <span class="tbl__n" role="cell">按服务端配置来，内网 http 也能用</span>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>内网地址要注意：</b>填了 <code>192.168.x.x</code> 这种家里地址的话，
+        手机连的是你家 Wi-Fi 才连得上；出门用流量就连不到了。
+        想在外面也能同步，得给家里的服务做内网穿透，或者直接用坚果云这种公网服务。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 限制 ============ -->
+  <section class="tut-sec" id="limit">
+    <div class="wrap">
+      <h2 class="tut-h2">坚果云这边有几个限制</h2>
+      <p class="tut-lead">
+        同步播放记录本身几乎不占额度，这些限制基本碰不到。
+        但如果你打算顺手用它存别的东西，先知道一下：
+      </p>
+      <ul class="check">
+        <li><b>单文件 500M</b>WebDAV 与网页端一致，私有云可自行调整</li>
+        <li><b>访问频率</b>免费版每 30 分钟不超过 600 次请求，付费版 1500 次</li>
+        <li><b>单次列出 750 项</b>一次请求最多返回 750 个文件和文件夹，支持分页多次加载</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 排查 ============ -->
+  <section class="tut-sec" id="fix">
+    <div class="wrap">
+      <h2 class="tut-h2">连不上，先查这五处</h2>
+      <p class="tut-lead">九成的问题都出在前两条。</p>
+      <ul class="check check--num">
+        <li><b>地址末尾少了斜杠</b><code>https://dav.jianguoyun.com/dav/</code> 最后那个 / 必须有</li>
+        <li><b>密码填成了登录密码</b>必须填坚果云里生成的那串应用密码，不是你的账号密码</li>
+        <li><b>手机不在同一个网里</b>填的是内网地址时，手机得连着家里 Wi-Fi；用流量就连不上</li>
+        <li><b>群晖没开服务</b>套件中心的「WebDAV Server」要装、要启用，防火墙要放行 5005 / 5006</li>
+        <li><b>https 证书不被信任</b>自建服务用了自签证书时，部分设备会直接拒连</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 结尾 ============ -->
+  <section class="tut-sec tut-cta">
+    <div class="wrap">
+      <h2 class="tut-h2">还没装 App？</h2>
+      <p class="tut-lead">手机、电脑、电视三端都有，全部免费，没有广告。</p>
+      <div class="tut-cta__row">
+        <a class="btn btn--primary" href="index.html#devices">去下载</a>
+        <a class="btn btn--text" href="index.html#faq">
+          还有别的疑问，看常见问题
+          <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <div class="foot__brand">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M8.5 5.2v13.6c0 .9 1 1.4 1.7.9l10.3-6.8c.7-.4.7-1.4 0-1.8L10.2 4.3c-.7-.5-1.7 0-1.7.9Z" fill="currentColor"/>
+      </svg>
+      <span>短剧之家</span>
+    </div>
+    <nav class="foot__links">
+      <a href="index.html#exclusive">独家功能</a>
+      <a href="index.html#devices">三端下载</a>
+      <a href="index.html#faq">常见问题</a>
+      <a href="webdav.html">WebDAV 教程</a>
+    </nav>
+    <p class="foot__legal">
+      本站内容均来自互联网公开资源，仅供个人学习交流使用。<br>
+      © <span id="year"></span> 短剧之家 · 本站不存储任何视频文件
+    </p>
+  </div>
+</footer>
+
+<script>
+/* 教程页只做两件小事：复制字段值 + 页脚年份。
+   刻意不引 app.js —— 那是首页的（hero 舞台、章节导航、同步演示都要首页 DOM），
+   教程页引了只会报一堆找不到元素。 */
+(function () {
+  var yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var src = document.getElementById(btn.getAttribute('data-copy'));
+      if (!src) return;
+      var text = src.textContent.trim();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(function () { fallbackCopy(text); });
+      } else {
+        fallbackCopy(text);
+      }
+      btn.textContent = '已复制';
+      btn.classList.add('is-done');
+      setTimeout(function () {
+        btn.textContent = '复制';
+        btn.classList.remove('is-done');
+      }, 1600);
+    });
+  });
+})();
+</script>
+</body>
+</html>

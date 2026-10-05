@@ -56,7 +56,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="css/main.css?v=25">
+<link rel="stylesheet" href="css/main.css?v=26">
 </head>
 <body>
 
@@ -414,6 +414,10 @@
           <li><b>冲突合并</b>两端同时看过同一集，自动保留最新的进度</li>
           <li><b>多机隔离</b>一个账号带多台设备时，可以分空间互不干扰</li>
         </ul>
+        <a class="btn btn--text feature__more reveal" data-delay="4" href="webdav.html">
+          坚果云 / 群晖 / OpenList 怎么填，看图文教程
+          <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
       <div class="feature__visual reveal wipe" data-delay="2">
         <div class="syncmock">
@@ -657,6 +661,8 @@
             在设置里找到「播放记录同步」，填入你的 WebDAV 地址、账号和密码即可。
             支持群晖、坚果云、OpenList 等标准 WebDAV 服务，内网自建的 http 地址也支持。
             不需要注册任何账号，记录直接存在你自己的盘里。
+            想要一步一步的图文说明，看
+            <a href="webdav.html">WebDAV 同步教程</a>。
           </div>
         </details>
         <details class="faq__item reveal">
@@ -710,6 +716,7 @@
       <a href="#exclusive">独家功能</a>
       <a href="#devices">三端下载</a>
       <a href="#faq">常见问题</a>
+      <a href="webdav.html">WebDAV 教程</a>
     </nav>
     <p class="foot__legal">
       本站内容均来自互联网公开资源，仅供个人学习交流使用。<br>
@@ -738,7 +745,7 @@
 -->
 <script>
 (function () {
-  var BUILD = 'b8';
+  var BUILD = 'b9';
   var KEY = '_siteBuild';
   try {
     if (sessionStorage.getItem(KEY) === BUILD) return;   // 本次会话已是最新

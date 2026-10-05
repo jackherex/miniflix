@@ -1,0 +1,291 @@
+/* ================================================================
+   WebDAV 教程页专用样式（只有 webdav.html 引，首页不受影响）
+   基调照 css/main.css 头部那套驾驶参数来：
+   暖玫瑰偏色的中性色 · 渐变字 0 · 正文 AA ≥4.5 · 重量对撞
+   ================================================================ */
+
+/* ---- 页头 ---- */
+.tut-nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,5,9,.72);
+  -webkit-backdrop-filter:saturate(140%) blur(14px);
+  backdrop-filter:saturate(140%) blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.tut-nav__inner{
+  display:flex;align-items:center;gap:10px;
+  height:58px;
+}
+.tut-nav__sep{color:var(--text-3);font-size:13px}
+.tut-nav__here{font-size:13.5px;color:var(--text-2);margin-right:auto}
+/* 品牌后面那个「返回首页」按钮贴右 */
+.tut-nav .btn{margin-left:auto}
+.tut-nav__here + .btn{margin-left:0}
+
+/* ---- 页头大标题 ---- */
+.tut-hero{position:relative;padding:96px 0 84px;text-align:center;overflow:hidden}
+.tut-hero__glow{
+  position:absolute;left:50%;top:-14%;width:min(1100px,120%);height:520px;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse 50% 60% at 50% 40%,rgba(255,45,85,.16),transparent 70%);
+}
+.tut-hero .wrap{position:relative}
+.tut-hero__eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:12.5px;font-weight:500;color:var(--text-3);
+  margin-bottom:20px;letter-spacing:.005em;
+}
+/* 编号徽章：跟首页 .feature__eyebrow i 同一套做法，
+   不做「大写 + 宽字距」那种喊话式标签 */
+.tut-hero__eyebrow i{
+  font-style:normal;font-size:10.5px;font-weight:600;
+  letter-spacing:.05em;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+  padding:3px 7px;border-radius:6px;
+  background:rgba(255,45,85,.11);border:1px solid rgba(255,45,85,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+}
+.tut-hero__title{
+  font-size:clamp(34px,5.4vw,60px);font-weight:700;line-height:1.06;
+  letter-spacing:var(--track-display);
+  min-width:0;overflow-wrap:anywhere;
+}
+.tut-hero__sub{
+  margin:22px auto 0;max-width:640px;
+  font-size:clamp(15px,1.6vw,18px);line-height:1.75;color:var(--text-2);
+}
+.tut-hero__cta{
+  margin-top:34px;display:flex;align-items:center;justify-content:center;
+  gap:14px;flex-wrap:wrap;
+}
+/* .btn 的基础 padding 在 main.css 的 .btn--sm / .btn--primary 里，
+   这里只补 primary 的尺寸，避免首页的按钮被牵连 */
+.tut-hero__cta .btn--primary{padding:12px 26px}
+
+/* ---- 段落骨架 ---- */
+.tut-sec{padding:78px 0;border-top:1px solid var(--line)}
+.tut-sec:first-of-type{border-top:none}
+.tut-h2{
+  font-size:clamp(24px,3.2vw,36px);font-weight:700;line-height:1.22;
+  letter-spacing:-.022em;min-width:0;overflow-wrap:anywhere;
+}
+.tut-lead{
+  margin-top:14px;max-width:720px;
+  font-size:16px;line-height:1.8;color:var(--text-2);
+}
+.tut-lead b{color:var(--text);font-weight:600}
+
+/* ---- 三个字段 ---- */
+.fields{
+  margin-top:34px;display:grid;gap:14px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.field{
+  background:linear-gradient(178deg,var(--surface-2) 0%,var(--surface) 60%);
+  border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:20px 20px 18px;
+}
+.field__k{
+  display:block;font-size:12px;font-weight:600;color:var(--text-3);
+  margin-bottom:12px;
+}
+.field__row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.field__v{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:13px;line-height:1.5;color:var(--text);
+  background:rgba(255,255,255,.045);border:1px solid var(--line);
+  border-radius:8px;padding:7px 11px;
+  word-break:break-all;flex:1 1 auto;min-width:0;
+}
+.field__copy{
+  flex:none;font-size:12px;font-weight:500;color:var(--accent);
+  background:rgba(255,45,85,.1);border:1px solid rgba(255,45,85,.22);
+  border-radius:8px;padding:7px 12px;cursor:pointer;
+  transition:background .25s var(--ease),color .25s var(--ease);
+}
+.field__copy:hover{background:rgba(255,45,85,.17)}
+.field__copy.is-done{color:#7ee08a;background:rgba(126,224,138,.12);border-color:rgba(126,224,138,.3)}
+.field__note{margin-top:11px;font-size:12px;line-height:1.6;color:var(--text-3)}
+.field__note--warn{color:var(--accent)}
+
+/* ---- 步骤 ---- */
+.steps{margin-top:38px;display:grid;gap:16px;list-style:none}
+.step{
+  display:flex;gap:20px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:26px 26px 24px;
+}
+.step__no{
+  flex:none;width:38px;height:38px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+  background:rgba(255,45,85,.11);border:1px solid rgba(255,45,85,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+}
+.step__body{min-width:0;flex:1}
+.step__t{font-size:18px;font-weight:600;letter-spacing:-.012em}
+.step__p{margin-top:10px;font-size:14.5px;line-height:1.8;color:var(--text-2)}
+.step__p b{color:var(--text);font-weight:600}
+.step__p a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+
+/* 路径面包屑：比假截图更干净，也不会骗人 */
+.crumb{
+  margin-top:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:12.5px;
+}
+.crumb span{
+  padding:5px 11px;border-radius:7px;
+  background:rgba(255,255,255,.045);border:1px solid var(--line);
+  color:var(--text-2);
+}
+.crumb i{color:var(--text-3);font-style:normal;font-size:13px}
+
+/* ---- 提示框 ---- */
+.note{
+  margin-top:18px;padding:16px 18px;border-radius:10px;
+  background:rgba(255,255,255,.035);border:1px solid var(--line);
+  border-left:2px solid var(--accent);
+  font-size:13.5px;line-height:1.8;color:var(--text-2);
+}
+.note b{color:var(--text);font-weight:600}
+.note code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12.5px;padding:2px 6px;border-radius:5px;
+  background:rgba(255,255,255,.06);color:var(--text);
+}
+.note--warn{background:rgba(255,45,85,.07);border-color:rgba(255,45,85,.2)}
+
+/* ---- 对照表 ---- */
+.tbl{
+  margin-top:32px;border:1px solid var(--line);border-radius:var(--radius-sm);
+  overflow:hidden;background:var(--surface);
+}
+.tbl__head,.tbl__row{
+  display:grid;grid-template-columns:190px minmax(0,1.1fr) minmax(0,1.4fr);
+  gap:18px;padding:16px 22px;align-items:start;
+}
+.tbl__head{
+  background:rgba(255,255,255,.03);border-bottom:1px solid var(--line);
+  font-size:12px;font-weight:600;color:var(--text-3);
+}
+.tbl__row{border-top:1px solid var(--line);font-size:14px}
+.tbl__row:first-of-type{border-top:none}
+.tbl__k{font-weight:600;color:var(--text)}
+.tbl__v code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12.5px;color:var(--text);word-break:break-all;
+  background:rgba(255,255,255,.045);border:1px solid var(--line);
+  border-radius:7px;padding:5px 9px;display:inline-block;
+}
+.tbl__v{color:var(--text)}
+.tbl__n{font-size:13px;line-height:1.7;color:var(--text-2)}
+
+/* ---- 清单 ---- */
+.check{margin-top:30px;display:grid;gap:12px;list-style:none}
+.check li{
+  position:relative;padding:15px 18px 15px 20px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;font-size:14.5px;line-height:1.75;color:var(--text-2);
+}
+.check li::before{
+  content:"";position:absolute;left:0;top:14px;bottom:14px;width:2px;
+  border-radius:2px;background:var(--line-strong);
+}
+.check li b{
+  display:block;color:var(--text);font-weight:600;font-size:15px;margin-bottom:3px;
+}
+/* 编号版清单（排查用） */
+.check--num{counter-reset:c}
+.check--num li{padding-left:52px}
+.check--num li::before{
+  counter-increment:c;content:counter(c,decimal-leading-zero);
+  position:absolute;left:18px;top:16px;bottom:auto;width:auto;
+  background:none;font-size:12px;font-weight:600;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---- 可展开的官方截图 ----
+   深色页面里放浅色界面截图，会显得很「贴」不住：
+   给细描边 + 圆角 + 一点投影，让它们像一张张纸片压在暗面上。 */
+.shots{
+  margin-top:26px;border:1px solid var(--line);border-radius:var(--radius-sm);
+  background:var(--surface);overflow:hidden;
+}
+.shots > summary{
+  display:flex;align-items:center;gap:12px;
+  padding:17px 22px;cursor:pointer;list-style:none;
+  font-size:14.5px;font-weight:600;color:var(--text);
+  transition:background .25s var(--ease);
+}
+.shots > summary::-webkit-details-marker{display:none}
+.shots > summary:hover{background:rgba(255,255,255,.03)}
+.shots__n{
+  flex:none;font-size:11.5px;font-weight:500;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+  padding:3px 8px;border-radius:6px;
+  background:rgba(255,45,85,.11);border:1px solid rgba(255,45,85,.22);
+}
+/* 展开指示：两条细线组成的 +，展开后转 45° 变成 × */
+.shots > summary::after{
+  content:"";margin-left:auto;flex:none;width:11px;height:11px;
+  background:
+    linear-gradient(var(--text-3),var(--text-3)) center/11px 1.5px no-repeat,
+    linear-gradient(var(--text-3),var(--text-3)) center/1.5px 11px no-repeat;
+  transition:transform .3s var(--ease);
+}
+.shots[open] > summary::after{transform:rotate(45deg)}
+.shots__tip{
+  margin:0 22px 4px;padding:13px 16px;border-radius:9px;
+  background:rgba(255,255,255,.035);border:1px solid var(--line);
+  font-size:13px;line-height:1.75;color:var(--text-2);
+}
+.shots__tip b{color:var(--text);font-weight:600}
+.shots__tip a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.shots__grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:18px;padding:18px 22px 22px;
+}
+.shots figure{
+  margin:0;border-radius:11px;overflow:hidden;
+  border:1px solid var(--line-strong);box-shadow:var(--sh-2);
+}
+.shots figure a{display:block}
+.shots img{display:block;width:100%;height:auto}
+.shots figcaption{
+  padding:11px 13px;font-size:12.5px;line-height:1.6;color:var(--text-2);
+  background:var(--bg-soft);border-top:1px solid var(--line);
+}
+
+/* ---- 参考出处 / 结尾 ---- */
+.tut-src{margin-top:26px;font-size:12.5px;color:var(--text-3)}
+.tut-src a{color:var(--text-2);text-decoration:underline;text-underline-offset:3px}
+.tut-src a:hover{color:var(--accent)}
+.tut-cta{text-align:center;padding-bottom:110px}
+.tut-cta .tut-lead{margin-left:auto;margin-right:auto}
+.tut-cta__row{
+  margin-top:30px;display:flex;align-items:center;justify-content:center;
+  gap:16px;flex-wrap:wrap;
+}
+.tut-cta__row .btn--primary{padding:12px 26px}
+
+/* ---- 移动端 ---- */
+@media (max-width:860px){
+  .fields{grid-template-columns:minmax(0,1fr)}
+  .tbl__head{display:none}
+  .tbl__row{
+    grid-template-columns:minmax(0,1fr);gap:10px;padding:18px 20px;
+  }
+  .tbl__row + .tbl__row{border-top:1px solid var(--line)}
+}
+@media (max-width:640px){
+  .tut-hero{padding:70px 0 60px}
+  .tut-sec{padding:60px 0}
+  .step{flex-direction:column;gap:14px;padding:22px 20px}
+  .shots__grid{grid-template-columns:minmax(0,1fr);padding:16px 18px 18px}
+  .shots > summary{padding:15px 18px;font-size:14px}
+  .shots__tip{margin:0 18px 4px}
+  .tut-nav__inner{height:52px;gap:8px}
+  .tut-nav__sep{display:none}
+  .tut-nav__here{font-size:12.5px}
+}

@@ -615,6 +615,8 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
   line-height:1.68;color:var(--text-2);
 }
 .feature__list{margin-top:32px;list-style:none;display:flex;flex-direction:column;gap:15px}
+/* 功能段底部往外走的文字链（目前只有功能 06 用它去 WebDAV 教程） */
+.feature__more{margin-top:28px;font-size:14.5px}
 .feature__list li{
   font-size:14.5px;color:var(--text-2);line-height:1.55;
   padding-left:23px;position:relative;

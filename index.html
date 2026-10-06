@@ -56,7 +56,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="css/main.css?v=27">
+<link rel="stylesheet" href="css/main.css?v=28">
 </head>
 <body>
 
@@ -582,6 +582,7 @@
             <li>WebDAV 同步</li>
           
             <li>预约追更</li>
+            <li>后台播放</li>
           </ul>
           <a class="btn btn--primary dev__btn" id="devPhoneBtn" href="https://github.com/jackherex/duanjuzhijia-down-phone/releases/latest" target="_blank" rel="noopener">前往下载</a>
           <div class="dev__meta" id="devPhoneMeta">APK · 约 30.1 MB</div>
@@ -602,6 +603,7 @@
             <li>WebDAV 同步</li>
           
             <li>预约追更</li>
+            <li>键盘快捷键</li>
           </ul>
           <a class="btn btn--primary dev__btn" id="devPcBtn" href="https://github.com/jackherex/duanjuzhijia-down-pc/releases/latest" target="_blank" rel="noopener">前往下载</a>
           <div class="dev__meta" id="devPcMeta">ZIP · 约 90.7 MB</div>
@@ -612,10 +614,11 @@
           </div>
           <h3 class="dev__name">Android TV 盒子版</h3>
           <p class="dev__desc">
-            遥控器操作，客厅大屏专用。按需发布 ——
-            没找到包时，可用手机版投屏到电视观看。
+            遥控器能用，手机更好用 —— 扫码连上就能在手机上搜剧、点播。
+            按需发布，没找到包时可用手机版投屏。
           </p>
           <ul class="dev__feat">
+            <li>手机扫码操控</li>
             <li>遥控器适配</li>
             <li>大屏布局</li>
             <li>无感加载下集</li>
@@ -629,6 +632,65 @@
       </div>
       <p class="dev-note reveal">
         TV 盒子版为独立维护，仅在确有更新时发布安装包 —— 点「前往下载」可在发布页翻找历史上传的 TV 包。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ TV 手机操控 ============ -->
+  <section class="tvctl" id="tvctl">
+    <div class="wrap">
+      <div class="sec-head sec-head--filet reveal">
+        <h2 class="sec-title">遥控器慢慢按？<br>不用了</h2>
+        <p class="sec-sub">
+          TV 版支持手机扫码操控。扫一下电视上的二维码连上，
+          之后搜剧、播放、翻历史都在手机上点 —— 电视只管放。
+        </p>
+      </div>
+
+      <div class="tvctl__grid">
+        <div class="tvcard reveal">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">搜剧</h3>
+          <p class="tvcard__d">手机上打字搜，比用遥控器一个字母一个字母按快得多。</p>
+        </div>
+
+        <div class="tvcard reveal" data-delay="1">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 5.2v13.6l11-6.8z"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">播放</h3>
+          <p class="tvcard__d">手机上点哪一集，电视就放哪一集，不用再拿遥控器翻列表。</p>
+        </div>
+
+        <div class="tvcard reveal" data-delay="2">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7.4V12l3.2 2"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">播放历史</h3>
+          <p class="tvcard__d">看过的都在手机上一列摆开，找昨天那部不用重新搜。</p>
+        </div>
+
+        <div class="tvcard reveal" data-delay="3">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 4.5v5h5"/><path d="M3.6 15a9 9 0 1 0 2.1-9.4L3 9.5"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">继续播放</h3>
+          <p class="tvcard__d">看到第几集第几分钟都记着，手机上一点，电视接着往下放。</p>
+        </div>
+      </div>
+
+      <p class="tvctl__note reveal">
+        在 TV 版里打开手机操控，用手机扫电视上显示的二维码就连上了。
       </p>
     </div>
   </section>
@@ -681,6 +743,15 @@
         <details class="faq__item reveal">
           <summary>手机和电脑能互相接着看吗？<span class="faq__sign"></span></summary>
           <div class="faq__body">配置好 WebDAV 同步后就行。手机上看到第 17 集的一半，电脑打开会从同一个位置继续。两端冲突时会自动保留最新的那个进度。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>TV 版怎么用手机操控？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            在 TV 版里打开手机操控，电视上会显示一个二维码，用手机扫一下就连上了。
+            连上之后，<b>搜剧、选集播放、查看播放历史、继续播放</b>都能在手机上完成，
+            电视只负责放 —— 不用再拿遥控器一个字母一个字母地搜。
+            遥控器仍然可以用，扫码只是多了个更省事的选择。
+          </div>
         </details>
         <details class="faq__item reveal">
           <summary>画质增强是每个平台都有吗？<span class="faq__sign"></span></summary>
@@ -776,7 +847,7 @@
 -->
 <script>
 (function () {
-  var BUILD = 'b10';
+  var BUILD = 'b11';
   var KEY = '_siteBuild';
   try {
     if (sessionStorage.getItem(KEY) === BUILD) return;   // 本次会话已是最新

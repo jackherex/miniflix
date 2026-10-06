@@ -1458,6 +1458,46 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
 }
 
 /* ================= 页脚 ================= */
+/* ================= TV 手机操控 =================
+   紧跟三端下载段：刚讲完去哪下，接着讲 TV 版现在该怎么用。
+   四张小卡横排，不做一个大 mock —— 这个功能是「省事」，讲清楚比画得热闹重要。 */
+.tvctl{padding:8px 0 110px}
+.tvctl__grid{
+  display:grid;gap:16px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.tvcard{
+  position:relative;
+  background:linear-gradient(178deg,var(--surface-2) 0%,var(--surface) 62%);
+  border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:26px 22px 24px;
+  box-shadow:var(--sh-2),var(--inset-top);
+  transition:transform .5s var(--ease),border-color .5s var(--ease);
+}
+.tvcard:hover{border-color:var(--line-strong);transform:translateY(-4px)}
+/* 图标徽章跟三端下载卡的 .dev__art 同一套做法，只是小一号 */
+.tvcard__ico{
+  display:flex;align-items:center;justify-content:center;
+  width:42px;height:42px;border-radius:13px;margin-bottom:18px;
+  background:linear-gradient(150deg,rgba(255,45,85,.16),rgba(255,107,61,.05));
+  color:var(--accent);border:1px solid rgba(255,45,85,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.tvcard__t{font-size:16.5px;font-weight:600;letter-spacing:-.012em}
+.tvcard__d{margin-top:9px;font-size:13.5px;line-height:1.75;color:var(--text-2)}
+.tvctl__note{
+  margin-top:30px;text-align:center;
+  font-size:13px;line-height:1.7;color:var(--text-3);
+}
+@media (max-width:1000px){
+  .tvctl__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .tvctl{padding:4px 0 76px}
+  .tvctl__grid{grid-template-columns:minmax(0,1fr);gap:12px}
+  .tvcard{padding:22px 20px}
+}
+
 /* ================= 官方群 =================
    放在 FAQ 之后：看完常见问题还有话要说的人，正好进群。
    做成一张「打了灯的卡片」，不是又一段通栏 —— 通栏会跟上下段落打架。 */

@@ -1458,6 +1458,62 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
 }
 
 /* ================= 页脚 ================= */
+/* ================= 官方群 =================
+   放在 FAQ 之后：看完常见问题还有话要说的人，正好进群。
+   做成一张「打了灯的卡片」，不是又一段通栏 —— 通栏会跟上下段落打架。 */
+.community{padding:8px 0 110px}
+.comm{
+  position:relative;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:44px;align-items:center;
+  padding:46px 48px;border-radius:var(--radius);
+  background:linear-gradient(178deg,var(--surface-2) 0%,var(--surface) 62%);
+  border:1px solid var(--line);
+  box-shadow:var(--sh-2),var(--inset-top);
+}
+/* 右上角那束光，跟首屏同一个光场，只是弱一号 */
+.comm__glow{
+  position:absolute;right:-6%;top:-60%;width:520px;height:460px;pointer-events:none;
+  background:radial-gradient(ellipse 50% 55% at 62% 50%,rgba(255,45,85,.15),transparent 70%);
+}
+.comm__copy{position:relative;min-width:0}
+.comm__eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:12.5px;font-weight:500;color:var(--text-3);
+  margin-bottom:18px;letter-spacing:.005em;
+}
+.comm__eyebrow i{
+  font-style:normal;font-size:10.5px;font-weight:600;
+  letter-spacing:.05em;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+  padding:3px 7px;border-radius:6px;
+  background:rgba(255,45,85,.11);border:1px solid rgba(255,45,85,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+}
+.comm__t{
+  font-size:clamp(24px,3.2vw,34px);font-weight:700;line-height:1.22;
+  letter-spacing:-.022em;min-width:0;overflow-wrap:anywhere;
+}
+.comm__d{margin-top:14px;max-width:560px;font-size:15px;line-height:1.8;color:var(--text-2)}
+.comm__go{
+  position:relative;flex:none;
+  display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+}
+.comm__btn{padding:14px 26px}
+.comm__note{font-size:12.5px;line-height:1.6;color:var(--text-3)}
+.comm__note span{opacity:.85}
+
+@media (max-width:900px){
+  .comm{grid-template-columns:minmax(0,1fr);gap:30px;padding:36px 26px}
+  .comm__copy{text-align:center}
+  .comm__go{align-items:center}
+  .comm__d{margin-left:auto;margin-right:auto}
+}
+@media (max-width:640px){
+  .community{padding:4px 0 76px}
+  .comm{padding:30px 20px;gap:26px}
+}
+
 .foot{
   border-top:1px solid var(--line);padding:54px 0 44px;
   background:var(--bg-soft);

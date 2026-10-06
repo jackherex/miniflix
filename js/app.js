@@ -55,8 +55,11 @@
     var drawer = document.createElement('div');
     drawer.className = 'nav__drawer';
     drawer.style.display = 'none';
+    // ⚠️ 这个抽屉的链接是**写死的**，不是从 .nav__links 复制的。
+    //    顶部导航加/改一条，这里必须同步加/改，否则手机上就没有那一项。
     drawer.innerHTML = '<a href="#exclusive">独家功能</a>' +
-      '<a href="#devices">三端下载</a><a href="#faq">常见问题</a>';
+      '<a href="#devices">三端下载</a><a href="#faq">常见问题</a>' +
+      '<a href="https://t.me/duanjuzhijia" target="_blank" rel="noopener">官方群</a>';
     nav.parentNode.insertBefore(drawer, nav.nextSibling);
 
     function close() {

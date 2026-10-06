@@ -56,7 +56,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="css/main.css?v=26">
+<link rel="stylesheet" href="css/main.css?v=27">
 </head>
 <body>
 
@@ -75,6 +75,7 @@
       <a href="#exclusive">独家功能</a>
       <a href="#devices">三端下载</a>
       <a href="#faq">常见问题</a>
+      <a href="https://t.me/duanjuzhijia" target="_blank" rel="noopener">官方群</a>
     </nav>
     <div class="nav__actions">
       <a class="btn btn--ghost btn--sm" href="#devices">下载</a>
@@ -702,6 +703,35 @@
     </div>
   </section>
 
+  <!-- ============ 官方群 ============ -->
+  <section class="community" id="community">
+    <div class="wrap">
+      <div class="comm reveal">
+        <div class="comm__glow" aria-hidden="true"></div>
+        <div class="comm__copy">
+          <p class="comm__eyebrow"><i>社群</i>Telegram 官方群</p>
+          <h2 class="comm__t">有问题，<br>直接进群问</h2>
+          <p class="comm__d">
+            新版本去哪下、某部剧找不着了、想反馈个 bug —— 在群里说一声就行，
+            比等邮件快得多。出新版本也会先在群里说一句。
+          </p>
+        </div>
+        <div class="comm__go">
+          <a class="btn btn--primary comm__btn" href="https://t.me/duanjuzhijia" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>
+            </svg>
+            加入官方群
+          </a>
+          <p class="comm__note">
+            t.me/duanjuzhijia
+            <span>· 需要能访问 Telegram 的网络</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="foot">
@@ -717,6 +747,7 @@
       <a href="#devices">三端下载</a>
       <a href="#faq">常见问题</a>
       <a href="webdav.html">WebDAV 教程</a>
+      <a href="https://t.me/duanjuzhijia" target="_blank" rel="noopener">官方群</a>
     </nav>
     <p class="foot__legal">
       本站内容均来自互联网公开资源，仅供个人学习交流使用。<br>
@@ -725,7 +756,7 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=21"></script>
+<script src="js/app.js?v=22"></script>
 
 <!--
   版本自检：让「改了但用户看不到」这件事自动消失
@@ -745,7 +776,7 @@
 -->
 <script>
 (function () {
-  var BUILD = 'b9';
+  var BUILD = 'b10';
   var KEY = '_siteBuild';
   try {
     if (sessionStorage.getItem(KEY) === BUILD) return;   // 本次会话已是最新

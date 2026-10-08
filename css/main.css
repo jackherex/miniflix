@@ -793,15 +793,27 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
   color:var(--text-2);
 }
 .dev__btn{position:relative;margin-top:26px;width:100%;padding:13px 0}
-/* 国内加速通道：主按钮下面的次级文字链。
-   分量要明显低于主按钮 —— 它是「连不上 GitHub 时的备选」，不是并列的两个按钮 */
+/* 国内加速通道：主按钮正下方的**描边次级按钮**，跟主按钮同宽。
+   原来做成 12.5px 的小文字链，用户反馈「都看不见了」——
+   它是下载页的第二条路，得像个按钮；但仍用描边而非实心，
+   主次关系不能乱：实心红 = 前往下载，描边 = 加速通道。 */
 .dev__mirror{
-  display:inline-flex;align-items:center;gap:5px;
-  margin-top:12px;font-size:12.5px;color:var(--text-2);
-  transition:color .25s var(--ease);
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  width:100%;margin-top:10px;padding:12px 0;
+  font-size:14px;font-weight:500;
+  border-radius:980px;
+  border:1px solid var(--line-strong);
+  background:rgba(255,255,255,.035);
+  color:var(--text);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  transition:border-color .3s var(--ease),background .3s var(--ease),color .3s var(--ease);
 }
-.dev__mirror svg{color:var(--accent);flex:none;opacity:.9}
-.dev__mirror:hover{color:var(--accent)}
+.dev__mirror svg{color:var(--accent);flex:none}
+.dev__mirror:hover{
+  border-color:rgba(255,45,85,.42);
+  background:rgba(255,45,85,.11);
+  color:var(--text);
+}
 
 /* ---- 国内加速下载弹窗 ----
    用原生 <dialog>：ESC 关闭、焦点陷阱、::backdrop 都是白送的，别自己造 */

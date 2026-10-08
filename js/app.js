@@ -1019,32 +1019,60 @@
       subEl.textContent = '选一条能打开的路：';
     }
 
+    /* 数据源优先级：**本地清单 → GitHub API → 回退链接**
+       为什么不让 API 打头阵：未认证的 GitHub API 每 IP 每小时只有 60 次，
+       访客共享出口 IP（公司/校园/运营商 NAT）时一打就满，实测线上确实撞到过
+       403 + x-ratelimit-remaining: 0。更何况我们做加速就是为了绕开国内访问
+       GitHub 不畅 —— 弹窗自己再去请求 api.github.com，本来就说不通。
+       所以：跟着站点一起发的 data/releases.json 才是主力，API 只当补丁。 */
+    function fromManifest(k) {
+      return fetch('data/releases.json', { cache: 'no-cache' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+          var e = d && d.ends && d.ends[k];
+          if (!e || !e.assets || !e.assets.length) return null;
+          return {
+            tag_name: e.tag,
+            assets: e.assets.map(function (x) {
+              return { name: x.name, size: x.size, browser_download_url: x.url };
+            })
+          };
+        })
+        .catch(function () { return null; });
+    }
+
+    function fromApi(repo) {
+      return fetch('https://api.github.com/repos/' + repo + '/releases?per_page=6',
+        { cache: 'no-cache' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (list) {
+          if (!list || !list.length) return null;
+          // TV 是按需发布，最新那个 release 可能根本没包 —— 往回找最近一个有资产的
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].assets && list[i].assets.length) return list[i];
+          }
+          return null;
+        })
+        .catch(function () { return null; });
+    }
+
     function open(a) {
       var k = a.getAttribute('data-dev');
       var repo = RELEASE[k].repo.replace('https://github.com/', '');
       tEl.textContent = (a.getAttribute('data-name') || '') + ' · 国内加速下载';
       tagEl.textContent = '获取中';
       subEl.textContent = '正在读取最新版本…';
-      box.innerHTML = '<div class="dlg__spin"><span></span>正在从 GitHub 读取…</div>';
+      box.innerHTML = '<div class="dlg__spin"><span></span>正在读取…</div>';
       if (!dlg.open) dlg.showModal();
 
-      var hit = cached(repo);
-      if (hit) { paint(hit); return; }
-      fetch('https://api.github.com/repos/' + repo + '/releases?per_page=6',
-        { cache: 'no-cache' })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (list) {
-          if (!list || !list.length) throw new Error('empty');
-          // TV 是按需发布，最新那个 release 可能根本没包 —— 往回找最近一个有资产的
-          var rel = null;
-          for (var i = 0; i < list.length; i++) {
-            if (list[i].assets && list[i].assets.length) { rel = list[i]; break; }
-          }
-          if (!rel) throw new Error('no-assets');
-          save(repo, rel);
-          paint(rel);
-        })
-        .catch(function () { fallback(a); });
+      fromManifest(k).then(function (rel) {
+        if (rel) { paint(rel); return; }
+        var hit = cached(repo);
+        if (hit) { paint(hit); return; }
+        return fromApi(repo).then(function (rel2) {
+          if (rel2) { save(repo, rel2); paint(rel2); } else { fallback(a); }
+        });
+      }).catch(function () { fallback(a); });
     }
 
     Array.prototype.forEach.call(links, function (a) {

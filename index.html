@@ -56,7 +56,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="css/main.css?v=30">
+<link rel="stylesheet" href="css/main.css?v=31">
 </head>
 <body>
 
@@ -584,7 +584,7 @@
             <li>预约追更</li>
             <li>后台播放</li>
           </ul>
-          <a class="btn btn--primary dev__btn" id="devPhoneBtn" href="https://github.com/jackherex/duanjuzhijia-down-phone/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="btn btn--primary dev__btn" id="devPhoneBtn" data-dev="phone" data-name="手机版" href="https://github.com/jackherex/duanjuzhijia-down-phone/releases/latest" target="_blank" rel="noopener">前往下载</a>
           <a class="dev__mirror" id="devPhoneMirror" data-dev="phone" data-name="手机版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-phone" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
             国内加速下载
@@ -609,7 +609,7 @@
             <li>预约追更</li>
             <li>键盘快捷键</li>
           </ul>
-          <a class="btn btn--primary dev__btn" id="devPcBtn" href="https://github.com/jackherex/duanjuzhijia-down-pc/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="btn btn--primary dev__btn" id="devPcBtn" data-dev="pc" data-name="电脑版" href="https://github.com/jackherex/duanjuzhijia-down-pc/releases/latest" target="_blank" rel="noopener">前往下载</a>
           <a class="dev__mirror" id="devPcMirror" data-dev="pc" data-name="电脑版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-pc" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
             国内加速下载
@@ -634,7 +634,7 @@
           
             <li>预约追更</li>
           </ul>
-          <a class="btn btn--primary dev__btn" id="devTvBtn" href="https://github.com/jackherex/duanjuzhijia-down-tv/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="btn btn--primary dev__btn" id="devTvBtn" data-dev="tv" data-name="TV 盒子版" href="https://github.com/jackherex/duanjuzhijia-down-tv/releases/latest" target="_blank" rel="noopener">前往下载</a>
           <a class="dev__mirror" id="devTvMirror" data-dev="tv" data-name="TV 盒子版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-tv" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
             国内加速下载
@@ -871,7 +871,7 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=24"></script>
+<script src="js/app.js?v=25"></script>
 
 <!--
   版本自检：让「改了但用户看不到」这件事自动消失
@@ -891,7 +891,7 @@
 -->
 <script>
 (function () {
-  var BUILD = 'b14';
+  var BUILD = 'b15';
   var KEY = '_siteBuild';
   try {
     if (sessionStorage.getItem(KEY) === BUILD) return;   // 本次会话已是最新

@@ -854,18 +854,21 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
 .dlg__t{font-size:19px;font-weight:700;letter-spacing:-.015em;padding-right:34px}
 .dlg__sub{margin-top:7px;font-size:13px;color:var(--text-2)}
 .dlg__body{margin-top:18px;display:grid;gap:9px}
+/* 一行里要放：长文件名 + 体积 + 两个按钮（原站 / 加速）。
+   文件名让它独占一行，体积和按钮组挤在第二行，才不会互相压扁。 */
 .dlg__item{
-  display:flex;align-items:center;gap:12px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;
   padding:13px 15px;border-radius:11px;
   background:rgba(255,255,255,.035);border:1px solid var(--line);
 }
 .dlg__fname{
-  min-width:0;flex:1;font-size:13.5px;line-height:1.45;word-break:break-all;
+  min-width:0;flex:1 1 100%;font-size:13.5px;line-height:1.45;word-break:break-all;
 }
 .dlg__fsize{
-  flex:none;font-size:12px;color:var(--text-3);font-variant-numeric:tabular-nums;
+  font-size:12px;color:var(--text-3);font-variant-numeric:tabular-nums;
 }
-.dlg__go{flex:none;margin-left:2px}
+.dlg__acts{display:flex;gap:8px;margin-left:auto}
+.dlg__acts .btn{padding:7px 14px}
 .dlg__err{
   padding:13px 15px;border-radius:11px;
   background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.22);
@@ -892,8 +895,7 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
 @media (max-width:560px){
   .dlg{max-width:94vw}
   .dlg__box{padding:24px 20px 18px}
-  .dlg__item{flex-wrap:wrap}
-  .dlg__go{margin-left:auto}
+  .dlg__acts{margin-left:auto}
 }
 .dev-note{
   margin-top:34px;text-align:center;font-size:12.5px;color:var(--text-3);

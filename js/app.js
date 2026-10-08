@@ -962,7 +962,8 @@
 
   function initMirror() {
     var dlg = $('#dlgDl');
-    var links = document.querySelectorAll('.dev__mirror');
+    // 「前往下载」和「国内加速下载」都弹同一个窗，只是默认先给哪条链接不同
+    var links = document.querySelectorAll('.dev__mirror, .dev__btn');
     if (!dlg || !links.length || typeof dlg.showModal !== 'function') return;
 
     var box = $('#dlgDlBody'), tagEl = $('#dlgDlTag'),
@@ -989,14 +990,32 @@
         JSON.stringify({ t: Date.now(), v: v })); } catch (e) {}
     }
 
-    function paint(rel) {
+    /* 每个安装包给**两条路**：原站直链 + gh-proxy 镜像直链。
+       谁排前面由入口决定 —— 点「前往下载」进来先给原站，
+       点「国内加速下载」进来先给镜像。两条都在，随时可以换。 */
+    function paint(rel, prefer) {
       var html = '';
       rel.assets.forEach(function (a) {
+        var origin = a.browser_download_url;
+        var mirror = GH_PROXY + origin;
+        var oBtn, mBtn, acts;
+        if (prefer === 'origin') {
+          oBtn = '<a class="btn btn--primary btn--sm" href="' + origin +
+            '" target="_blank" rel="noopener">原站下载</a>';
+          mBtn = '<a class="btn btn--ghost btn--sm" href="' + mirror +
+            '" target="_blank" rel="noopener">加速</a>';
+          acts = oBtn + mBtn;
+        } else {
+          mBtn = '<a class="btn btn--primary btn--sm" href="' + mirror +
+            '" target="_blank" rel="noopener">加速下载</a>';
+          oBtn = '<a class="btn btn--ghost btn--sm" href="' + origin +
+            '" target="_blank" rel="noopener">原站</a>';
+          acts = mBtn + oBtn;          // 从加速按钮进来，加速排第一
+        }
         html += '<div class="dlg__item">' +
           '<span class="dlg__fname">' + esc(a.name) + '</span>' +
           '<span class="dlg__fsize">' + size(a.size) + '</span>' +
-          '<a class="btn btn--primary btn--sm dlg__go" href="' + GH_PROXY +
-            a.browser_download_url + '" target="_blank" rel="noopener">加速下载</a>' +
+          '<span class="dlg__acts">' + acts + '</span>' +
           '</div>';
       });
       box.innerHTML = html;
@@ -1004,21 +1023,32 @@
       subEl.textContent = '共 ' + rel.assets.length + ' 个安装包，挑一个下载：';
     }
 
-    function fallback(a) {
+    function fallback(a, prefer) {
       var k = a.getAttribute('data-dev');
+      var mirrorPage = 'https://gh-proxy.com/#' + RELEASE[k].repo;
+      var ghPage = RELEASE[k].latest;
+      var b1 = prefer === 'mirror'
+        ? '<a class="btn btn--primary btn--sm" href="' + mirrorPage +
+          '" target="_blank" rel="noopener">去挑版本</a>'
+        : '<a class="btn btn--primary btn--sm" href="' + ghPage +
+          '" target="_blank" rel="noopener">打开</a>';
+      var b2 = prefer === 'mirror'
+        ? '<a class="btn btn--ghost btn--sm" href="' + ghPage +
+          '" target="_blank" rel="noopener">原站</a>'
+        : '<a class="btn btn--ghost btn--sm" href="' + mirrorPage +
+          '" target="_blank" rel="noopener">镜像</a>';
       box.innerHTML =
-        '<div class="dlg__err">没取到最新版本 —— 可能是 GitHub 接口限流，' +
-        '也可能是网络不通。这两条路照样能下：</div>' +
-        '<div class="dlg__item"><span class="dlg__fname">gh-proxy 镜像页</span>' +
-        '<a class="btn btn--primary btn--sm dlg__go" href="' + a.getAttribute('href') +
-        '" target="_blank" rel="noopener">去挑版本</a></div>' +
-        '<div class="dlg__item"><span class="dlg__fname">GitHub 发布页（原站）</span>' +
-        '<a class="btn btn--ghost btn--sm dlg__go" href="' + RELEASE[k].latest +
-        '" target="_blank" rel="noopener">打开</a></div>';
+        '<div class="dlg__err">没取到安装包清单 —— data/releases.json 读不到，' +
+        'GitHub 接口也没响应（限流或网络不通）。这两条路照样能下：</div>' +
+        '<div class="dlg__item"><span class="dlg__fname">' +
+        (prefer === 'mirror' ? 'gh-proxy 镜像页' : 'GitHub 发布页（原站）') +
+        '</span><span class="dlg__acts">' + b1 + '</span></div>' +
+        '<div class="dlg__item"><span class="dlg__fname">' +
+        (prefer === 'mirror' ? 'GitHub 发布页（原站）' : 'gh-proxy 镜像页') +
+        '</span><span class="dlg__acts">' + b2 + '</span></div>';
       tagEl.textContent = '回退';
       subEl.textContent = '选一条能打开的路：';
     }
-
     /* 数据源优先级：**本地清单 → GitHub API → 回退链接**
        为什么不让 API 打头阵：未认证的 GitHub API 每 IP 每小时只有 60 次，
        访客共享出口 IP（公司/校园/运营商 NAT）时一打就满，实测线上确实撞到过
@@ -1056,23 +1086,24 @@
         .catch(function () { return null; });
     }
 
-    function open(a) {
+    function open(a, prefer) {
       var k = a.getAttribute('data-dev');
       var repo = RELEASE[k].repo.replace('https://github.com/', '');
-      tEl.textContent = (a.getAttribute('data-name') || '') + ' · 国内加速下载';
+      tEl.textContent = (a.getAttribute('data-name') || '') +
+        (prefer === 'mirror' ? ' · 国内加速下载' : ' · 下载');
       tagEl.textContent = '获取中';
       subEl.textContent = '正在读取最新版本…';
       box.innerHTML = '<div class="dlg__spin"><span></span>正在读取…</div>';
       if (!dlg.open) dlg.showModal();
 
       fromManifest(k).then(function (rel) {
-        if (rel) { paint(rel); return; }
+        if (rel) { paint(rel, prefer); return; }
         var hit = cached(repo);
-        if (hit) { paint(hit); return; }
+        if (hit) { paint(hit, prefer); return; }
         return fromApi(repo).then(function (rel2) {
-          if (rel2) { save(repo, rel2); paint(rel2); } else { fallback(a); }
+          if (rel2) { save(repo, rel2); paint(rel2, prefer); } else { fallback(a, prefer); }
         });
-      }).catch(function () { fallback(a); });
+      }).catch(function () { fallback(a, prefer); });
     }
 
     Array.prototype.forEach.call(links, function (a) {
@@ -1080,7 +1111,7 @@
         // Ctrl / ⌘ / Shift + 点击、中键 —— 用户想新开标签，别拦
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
-        open(a);
+        open(a, a.classList.contains('dev__mirror') ? 'mirror' : 'origin');
       });
     });
 

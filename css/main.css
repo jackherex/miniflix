@@ -793,6 +793,96 @@ html.js-reveal .split.in .w{opacity:1;transform:none}
   color:var(--text-2);
 }
 .dev__btn{position:relative;margin-top:26px;width:100%;padding:13px 0}
+/* 国内加速通道：主按钮下面的次级文字链。
+   分量要明显低于主按钮 —— 它是「连不上 GitHub 时的备选」，不是并列的两个按钮 */
+.dev__mirror{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:12px;font-size:12.5px;color:var(--text-2);
+  transition:color .25s var(--ease);
+}
+.dev__mirror svg{color:var(--accent);flex:none;opacity:.9}
+.dev__mirror:hover{color:var(--accent)}
+
+/* ---- 国内加速下载弹窗 ----
+   用原生 <dialog>：ESC 关闭、焦点陷阱、::backdrop 都是白送的，别自己造 */
+.dlg{
+  padding:0;border:none;background:none;color:var(--text);
+  max-width:min(560px,92vw);width:100%;
+  /* ⚠️ 必须显式写：第 81 行那条 `*{margin:0}` 会把 dialog 自带的
+     margin:auto 一起干掉 —— 结果弹窗贴在左上角，不居中。 */
+  margin:auto;
+}
+.dlg::backdrop{
+  background:rgba(4,3,6,.74);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+.dlg__box{
+  position:relative;padding:28px 28px 22px;border-radius:var(--radius);
+  background:linear-gradient(178deg,var(--surface-2) 0%,var(--surface) 62%);
+  border:1px solid var(--line-strong);box-shadow:var(--sh-4);
+}
+.dlg__x{
+  position:absolute;top:13px;right:13px;
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  border-radius:9px;color:var(--text-3);
+  background:rgba(255,255,255,.04);border:1px solid var(--line);
+  transition:color .25s var(--ease),background .25s var(--ease);
+}
+.dlg__x:hover{color:var(--text);background:rgba(255,255,255,.08)}
+.dlg__eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11.5px;color:var(--text-3);margin-bottom:10px;
+}
+.dlg__eyebrow i{
+  font-style:normal;font-size:10.5px;font-weight:600;letter-spacing:.05em;
+  color:var(--accent);font-variant-numeric:tabular-nums;
+  padding:3px 7px;border-radius:6px;
+  background:rgba(255,45,85,.11);border:1px solid rgba(255,45,85,.22);
+}
+.dlg__t{font-size:19px;font-weight:700;letter-spacing:-.015em;padding-right:34px}
+.dlg__sub{margin-top:7px;font-size:13px;color:var(--text-2)}
+.dlg__body{margin-top:18px;display:grid;gap:9px}
+.dlg__item{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 15px;border-radius:11px;
+  background:rgba(255,255,255,.035);border:1px solid var(--line);
+}
+.dlg__fname{
+  min-width:0;flex:1;font-size:13.5px;line-height:1.45;word-break:break-all;
+}
+.dlg__fsize{
+  flex:none;font-size:12px;color:var(--text-3);font-variant-numeric:tabular-nums;
+}
+.dlg__go{flex:none;margin-left:2px}
+.dlg__err{
+  padding:13px 15px;border-radius:11px;
+  background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.22);
+  font-size:13px;line-height:1.75;color:var(--text-2);
+}
+.dlg__note{
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:11.5px;line-height:1.7;color:var(--text-3);
+}
+/* 读取中的小转圈：尊重 prefers-reduced-motion */
+.dlg__spin{
+  display:flex;align-items:center;gap:10px;
+  padding:16px 15px;font-size:13px;color:var(--text-2);
+}
+.dlg__spin span{
+  width:14px;height:14px;border-radius:50%;flex:none;
+  border:2px solid rgba(255,255,255,.18);border-top-color:var(--accent);
+  animation:dlgSpin .8s linear infinite;
+}
+@keyframes dlgSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){
+  .dlg__spin span{animation:none}
+}
+@media (max-width:560px){
+  .dlg{max-width:94vw}
+  .dlg__box{padding:24px 20px 18px}
+  .dlg__item{flex-wrap:wrap}
+  .dlg__go{margin-left:auto}
+}
 .dev-note{
   margin-top:34px;text-align:center;font-size:12.5px;color:var(--text-3);
   line-height:1.7;max-width:600px;margin-left:auto;margin-right:auto;

@@ -946,6 +946,121 @@
     if (tm) tm.textContent = 'APK · 约 ' + RELEASE.tv.size;
   }
 
+  /* ---------- 国内加速：站内弹窗直取最新版 ----------
+     点「国内加速下载」不再跳走：弹出一个小窗，当场从 GitHub API 取该端最新
+     release 的资产，每条给一个 gh-proxy 镜像直链，点了就下。
+
+     ⚠️ 三个前提，别踩：
+     1) gh-proxy **只代理文件，不代理网页** —— 实测代理 Release 页面返回 403
+        "Web page content is not allowed. This service is for resource downloads only."
+        → 镜像链接 = gh-proxy 前缀 + 原始**文件** URL，绝不能是页面
+     2) 未认证的 GitHub API 每 IP 每小时只有 60 次，访客共享出口 IP 时很容易打满
+        → 结果按会话缓存 10 分钟；撞限流就明说，并给两条回退路径
+     3) <a> 上保留真实的 gh-proxy「仓库解析页」href —— 没 JS、JS 报错、API 挂了、
+        用户 Ctrl+点击想新开标签，都照常跳转，不会变成死按钮 */
+  var GH_PROXY = 'https://gh-proxy.com/';
+
+  function initMirror() {
+    var dlg = $('#dlgDl');
+    var links = document.querySelectorAll('.dev__mirror');
+    if (!dlg || !links.length || typeof dlg.showModal !== 'function') return;
+
+    var box = $('#dlgDlBody'), tagEl = $('#dlgDlTag'),
+        tEl = $('#dlgDlT'), subEl = $('#dlgDlSub');
+    var TTL = 10 * 60 * 1000;
+
+    function esc(v) {
+      return String(v).replace(/[&<>"]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+      });
+    }
+    function size(n) {
+      return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB'
+                          : Math.max(1, Math.round(n / 1024)) + ' KB';
+    }
+    function cached(repo) {
+      try {
+        var o = JSON.parse(sessionStorage.getItem('dlMirror_' + repo) || 'null');
+        return (o && Date.now() - o.t < TTL) ? o.v : null;
+      } catch (e) { return null; }
+    }
+    function save(repo, v) {
+      try { sessionStorage.setItem('dlMirror_' + repo,
+        JSON.stringify({ t: Date.now(), v: v })); } catch (e) {}
+    }
+
+    function paint(rel) {
+      var html = '';
+      rel.assets.forEach(function (a) {
+        html += '<div class="dlg__item">' +
+          '<span class="dlg__fname">' + esc(a.name) + '</span>' +
+          '<span class="dlg__fsize">' + size(a.size) + '</span>' +
+          '<a class="btn btn--primary btn--sm dlg__go" href="' + GH_PROXY +
+            a.browser_download_url + '" target="_blank" rel="noopener">加速下载</a>' +
+          '</div>';
+      });
+      box.innerHTML = html;
+      tagEl.textContent = rel.tag_name;
+      subEl.textContent = '共 ' + rel.assets.length + ' 个安装包，挑一个下载：';
+    }
+
+    function fallback(a) {
+      var k = a.getAttribute('data-dev');
+      box.innerHTML =
+        '<div class="dlg__err">没取到最新版本 —— 可能是 GitHub 接口限流，' +
+        '也可能是网络不通。这两条路照样能下：</div>' +
+        '<div class="dlg__item"><span class="dlg__fname">gh-proxy 镜像页</span>' +
+        '<a class="btn btn--primary btn--sm dlg__go" href="' + a.getAttribute('href') +
+        '" target="_blank" rel="noopener">去挑版本</a></div>' +
+        '<div class="dlg__item"><span class="dlg__fname">GitHub 发布页（原站）</span>' +
+        '<a class="btn btn--ghost btn--sm dlg__go" href="' + RELEASE[k].latest +
+        '" target="_blank" rel="noopener">打开</a></div>';
+      tagEl.textContent = '回退';
+      subEl.textContent = '选一条能打开的路：';
+    }
+
+    function open(a) {
+      var k = a.getAttribute('data-dev');
+      var repo = RELEASE[k].repo.replace('https://github.com/', '');
+      tEl.textContent = (a.getAttribute('data-name') || '') + ' · 国内加速下载';
+      tagEl.textContent = '获取中';
+      subEl.textContent = '正在读取最新版本…';
+      box.innerHTML = '<div class="dlg__spin"><span></span>正在从 GitHub 读取…</div>';
+      if (!dlg.open) dlg.showModal();
+
+      var hit = cached(repo);
+      if (hit) { paint(hit); return; }
+      fetch('https://api.github.com/repos/' + repo + '/releases?per_page=6',
+        { cache: 'no-cache' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (list) {
+          if (!list || !list.length) throw new Error('empty');
+          // TV 是按需发布，最新那个 release 可能根本没包 —— 往回找最近一个有资产的
+          var rel = null;
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].assets && list[i].assets.length) { rel = list[i]; break; }
+          }
+          if (!rel) throw new Error('no-assets');
+          save(repo, rel);
+          paint(rel);
+        })
+        .catch(function () { fallback(a); });
+    }
+
+    Array.prototype.forEach.call(links, function (a) {
+      a.addEventListener('click', function (e) {
+        // Ctrl / ⌘ / Shift + 点击、中键 —— 用户想新开标签，别拦
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        open(a);
+      });
+    });
+
+    $('#dlgDlX').addEventListener('click', function () { dlg.close(); });
+    // 点遮罩关闭：原生 dialog 的 ::backdrop 点击时，事件目标就是 dialog 元素本身
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  }
+
   /* ---------- 启动 ---------- */
   function boot(data) {
     DATA.items = (data && data.items) || [];
@@ -967,6 +1082,8 @@
   }
 
   initNav();
+  // 下载弹窗不依赖剧集数据，单独初始化 —— dramas.json 挂了也得能下 App
+  initMirror();
 
   fetch('data/dramas.json', { cache: 'no-cache' })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })

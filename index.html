@@ -56,7 +56,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="css/main.css?v=28">
+<link rel="stylesheet" href="css/main.css?v=29">
 </head>
 <body>
 
@@ -585,6 +585,10 @@
             <li>后台播放</li>
           </ul>
           <a class="btn btn--primary dev__btn" id="devPhoneBtn" href="https://github.com/jackherex/duanjuzhijia-down-phone/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="dev__mirror" id="devPhoneMirror" data-dev="phone" data-name="手机版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-phone" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            国内加速下载
+          </a>
           <div class="dev__meta" id="devPhoneMeta">APK · 约 30.1 MB</div>
         </div>
         <div class="dev reveal spot tilt" data-delay="1">
@@ -606,6 +610,10 @@
             <li>键盘快捷键</li>
           </ul>
           <a class="btn btn--primary dev__btn" id="devPcBtn" href="https://github.com/jackherex/duanjuzhijia-down-pc/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="dev__mirror" id="devPcMirror" data-dev="pc" data-name="电脑版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-pc" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            国内加速下载
+          </a>
           <div class="dev__meta" id="devPcMeta">ZIP · 约 90.7 MB</div>
         </div>
         <div class="dev reveal spot tilt" data-delay="2">
@@ -627,11 +635,19 @@
             <li>预约追更</li>
           </ul>
           <a class="btn btn--primary dev__btn" id="devTvBtn" href="https://github.com/jackherex/duanjuzhijia-down-tv/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="dev__mirror" id="devTvMirror" data-dev="tv" data-name="TV 盒子版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-tv" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            国内加速下载
+          </a>
           <div class="dev__meta" id="devTvMeta">APK · 按需发布</div>
         </div>
       </div>
       <p class="dev-note reveal">
         TV 盒子版为独立维护，仅在确有更新时发布安装包 —— 点「前往下载」可在发布页翻找历史上传的 TV 包。
+        <br>
+        「国内加速下载」走第三方镜像 gh-proxy.com —— 打开就是该仓库的发布列表，
+        选好版本和架构再下载，不用进 GitHub。TV 端 arm64 和 armeabi-v7a 两个包都有，
+        按自己盒子挑。文件由镜像转发，我们不改包。
       </p>
     </div>
   </section>
@@ -705,6 +721,16 @@
         <details class="faq__item reveal">
           <summary>官网上的剧集点进去能直接播吗？<span class="faq__sign"></span></summary>
           <div class="faq__body">官网上的剧集只做展示，帮你了解有哪些内容。想真正播放，请下载手机版、电脑版或 TV 盒子版客户端，全部内容都在里面。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>下载太慢，或者 GitHub 打不开怎么办？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            每张下载卡的主按钮下面还有一个<b>「国内加速下载」</b>，它走第三方镜像
+            <a href="https://gh-proxy.com/" target="_blank" rel="noopener">gh-proxy.com</a>。
+            打开是该仓库的发布列表，选好版本和架构之后走镜像下载，全程不用进 GitHub。
+            安装包仍然来自我们自己的 GitHub 发布页，镜像只负责转发，我们不经手、也不改包。
+            镜像哪天不好用了，换回上面的「前往下载」走原站就行。
+          </div>
         </details>
         <details class="faq__item reveal">
           <summary>下载按钮为什么跳转到 GitHub？<span class="faq__sign"></span></summary>
@@ -805,6 +831,24 @@
 
 </main>
 
+<!-- 国内加速下载弹窗：点了不跳走，当场取该端最新 release 的资产，
+     每条给一个 gh-proxy 镜像直链。用原生 <dialog>，ESC 关闭和焦点陷阱都是白送的。 -->
+<dialog class="dlg" id="dlgDl" aria-labelledby="dlgDlT">
+  <div class="dlg__box">
+    <button class="dlg__x" id="dlgDlX" type="button" aria-label="关闭">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <p class="dlg__eyebrow"><i id="dlgDlTag">获取中</i></p>
+    <h3 class="dlg__t" id="dlgDlT">国内加速下载</h3>
+    <p class="dlg__sub" id="dlgDlSub">正在读取最新版本…</p>
+    <div class="dlg__body" id="dlgDlBody"></div>
+    <p class="dlg__note">
+      「加速下载」走第三方镜像 gh-proxy.com，文件由它转发，我们不改包。
+      装不上 arm64 包的电视盒子，挑 armeabi-v7a 那个。
+    </p>
+  </div>
+</dialog>
+
 <footer class="foot">
   <div class="wrap foot__inner">
     <div class="foot__brand">
@@ -827,7 +871,7 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=22"></script>
+<script src="js/app.js?v=23"></script>
 
 <!--
   版本自检：让「改了但用户看不到」这件事自动消失
@@ -847,7 +891,7 @@
 -->
 <script>
 (function () {
-  var BUILD = 'b11';
+  var BUILD = 'b12';
   var KEY = '_siteBuild';
   try {
     if (sessionStorage.getItem(KEY) === BUILD) return;   // 本次会话已是最新

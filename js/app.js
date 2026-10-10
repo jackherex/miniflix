@@ -967,7 +967,8 @@
     if (!dlg || !links.length || typeof dlg.showModal !== 'function') return;
 
     var box = $('#dlgDlBody'), tagEl = $('#dlgDlTag'),
-        tEl = $('#dlgDlT'), subEl = $('#dlgDlSub');
+        tEl = $('#dlgDlT'), subEl = $('#dlgDlSub'), noteEl = $('#dlgDlNote');
+    var noteBase = noteEl ? noteEl.textContent.trim() : '';
     var TTL = 10 * 60 * 1000;
 
     function esc(v) {
@@ -1063,6 +1064,7 @@
           if (!e || !e.assets || !e.assets.length) return null;
           return {
             tag_name: e.tag,
+            updated: d && d.updated,
             assets: e.assets.map(function (x) {
               return { name: x.name, size: x.size, browser_download_url: x.url };
             })
@@ -1086,6 +1088,42 @@
         .catch(function () { return null; });
     }
 
+    /* 清单是人工维护的，忘了更新就会一直给旧包（2026-10-10 真出过一次）。
+       所以渲染完之后**静默**去 GitHub 核对一次 tag：
+         · 一致 → 什么都不做，用户毫无感知
+         · 不一致 → 顶部插一条提示，点「用它」就切到那个新版
+         · 限流 / 网络不通 → 静默失败，继续用清单里的版本，绝不打断下载
+       每会话每端只查一次，且先标记再发请求（失败也不重试，省配额）。 */
+    function checkNewer(a, k, repo, rel) {
+      var key = 'dlCheck_' + repo;
+      try {
+        if (sessionStorage.getItem(key)) return;
+        sessionStorage.setItem(key, '1');
+      } catch (e) {}
+      fetch('https://api.github.com/repos/' + repo + '/releases?per_page=3',
+        { cache: 'no-cache' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (list) {
+          if (!list || !list.length) return;
+          var top = null;
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].assets && list[i].assets.length) { top = list[i]; break; }
+          }
+          if (!top || top.tag_name === rel.tag_name) return;
+          if (!dlg.open) return;                       // 用户已经关了，别再动 DOM
+          var tip = document.createElement('div');
+          tip.className = 'dlg__new';
+          tip.innerHTML = '仓库里有更新的版本 <b>' + esc(top.tag_name) + '</b>' +
+            '<button type="button" class="btn btn--sm dlg__newbtn">用它</button>';
+          tip.querySelector('.dlg__newbtn').addEventListener('click', function () {
+            save(repo, top);
+            paint(top, a.classList.contains('dev__mirror') ? 'mirror' : 'origin');
+          });
+          box.insertBefore(tip, box.firstChild);
+        })
+        .catch(function () {});
+    }
+
     function open(a, prefer) {
       var k = a.getAttribute('data-dev');
       var repo = RELEASE[k].repo.replace('https://github.com/', '');
@@ -1097,7 +1135,14 @@
       if (!dlg.open) dlg.showModal();
 
       fromManifest(k).then(function (rel) {
-        if (rel) { paint(rel, prefer); return; }
+        if (rel) {
+          paint(rel, prefer);
+          if (rel.updated && noteEl) {
+            noteEl.textContent = noteBase + ' 安装包清单更新于 ' + rel.updated + '。';
+          }
+          checkNewer(a, k, repo, rel);      // 不阻塞：先用清单秒开，再背后核对
+          return;
+        }
         var hit = cached(repo);
         if (hit) { paint(hit, prefer); return; }
         return fromApi(repo).then(function (rel2) {

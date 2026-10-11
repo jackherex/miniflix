@@ -56,7 +56,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="css/main.css?v=32">
+<link rel="stylesheet" href="css/main.css?v=34">
 </head>
 <body>
 
@@ -842,6 +842,7 @@
     <h3 class="dlg__t" id="dlgDlT">国内加速下载</h3>
     <p class="dlg__sub" id="dlgDlSub">正在读取最新版本…</p>
     <div class="dlg__body" id="dlgDlBody"></div>
+    <button class="dlg__refresh" id="dlgDlRefresh" type="button">检查是否有更新版本</button>
     <p class="dlg__note" id="dlgDlNote">
       「加速下载」走第三方镜像 gh-proxy.com，文件由它转发，我们不改包。
       装不上 arm64 包的电视盒子，挑 armeabi-v7a 那个。
@@ -871,7 +872,7 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=26"></script>
+<script src="js/app.js?v=28"></script>
 
 <!--
   版本自检：让「改了但用户看不到」这件事自动消失
@@ -891,7 +892,7 @@
 -->
 <script>
 (function () {
-  var BUILD = 'b16';
+  var BUILD = 'b18';
   var KEY = '_siteBuild';
   try {
     if (sessionStorage.getItem(KEY) === BUILD) return;   // 本次会话已是最新

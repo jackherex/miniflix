@@ -969,6 +969,7 @@
     var box = $('#dlgDlBody'), tagEl = $('#dlgDlTag'),
         tEl = $('#dlgDlT'), subEl = $('#dlgDlSub'), noteEl = $('#dlgDlNote');
     var noteBase = noteEl ? noteEl.textContent.trim() : '';
+    var curA = null, curRel = null;      // 当前入口按钮与清单，供「检查更新」用
     var TTL = 10 * 60 * 1000;
 
     function esc(v) {
@@ -1088,38 +1089,77 @@
         .catch(function () { return null; });
     }
 
-    /* 清单是人工维护的，忘了更新就会一直给旧包（2026-10-10 真出过一次）。
-       所以渲染完之后**静默**去 GitHub 核对一次 tag：
-         · 一致 → 什么都不做，用户毫无感知
-         · 不一致 → 顶部插一条提示，点「用它」就切到那个新版
-         · 限流 / 网络不通 → 静默失败，继续用清单里的版本，绝不打断下载
-       每会话每端只查一次，且先标记再发请求（失败也不重试，省配额）。 */
-    function checkNewer(a, k, repo, rel) {
+    /* 清单是人工维护的，忘了更新就会一直给旧包（10-10、10-11 连着出过两次）。
+       渲染完之后静默去 GitHub 核对一次 tag：
+         · 一致   → 什么都不做
+         · 不一致 → 顶部插提示条，点「用它」切过去
+         · 取不到 → 静默失败，继续用清单版本，绝不打断下载
+
+       ⚠️ 通道顺序有讲究：**先走 gh-proxy 代理的 api.github.com**。
+          实测它能代理 API（返回 200 JSON —— 它只拦 HTML 网页内容，JSON 放行），
+          而国内直连 api.github.com 经常不通。直连只当备用。
+          （10-10 那次兜底没生效，就是因为只走直连。）
+       每会话每端只查一次；点「检查是否有更新版本」可强制再查。 */
+    function tryFetch(url) {
+      return fetch(url, { cache: 'no-cache' }).then(function (r) {
+        return r.ok ? r.json() : null;
+      }).catch(function () { return null; });
+    }
+
+    function showTip(html) {
+      var old = box.querySelector('.dlg__tip');
+      if (old) { box.removeChild(old); }
+      var tip = document.createElement('div');
+      tip.className = 'dlg__tip dlg__new';
+      tip.innerHTML = html;
+      box.insertBefore(tip, box.firstChild);
+    }
+
+    function checkNewer(a, k, repo, rel, force) {
       var key = 'dlCheck_' + repo;
-      try {
-        if (sessionStorage.getItem(key)) return;
-        sessionStorage.setItem(key, '1');
-      } catch (e) {}
-      fetch('https://api.github.com/repos/' + repo + '/releases?per_page=3',
-        { cache: 'no-cache' })
-        .then(function (r) { return r.ok ? r.json() : null; })
+      if (!force) {
+        try {
+          if (sessionStorage.getItem(key)) return Promise.resolve();
+          sessionStorage.setItem(key, '1');
+        } catch (e) {}
+      }
+      var api = 'https://api.github.com/repos/' + repo + '/releases?per_page=3';
+      return tryFetch(GH_PROXY + api)
         .then(function (list) {
-          if (!list || !list.length) return;
+          return (list && list.length) ? list : tryFetch(api);   // 镜像不通再直连
+        })
+        .then(function (list) {
+          if (!dlg.open) return;
+          if (!list || !list.length) {
+            if (force) {
+              // 查不到也要给用户出路，而不是干瞪眼
+              showTip('没查到 —— 可能是接口限流或网络不通。' +
+                '<a href="' + GH_PROXY + '#' + RELEASE[k].repo +
+                '" target="_blank" rel="noopener">去镜像页挑最新版</a> · ' +
+                '<a href="' + RELEASE[k].latest +
+                '" target="_blank" rel="noopener">看发布页</a>');
+            }
+            return;
+          }
           var top = null;
           for (var i = 0; i < list.length; i++) {
             if (list[i].assets && list[i].assets.length) { top = list[i]; break; }
           }
-          if (!top || top.tag_name === rel.tag_name) return;
-          if (!dlg.open) return;                       // 用户已经关了，别再动 DOM
-          var tip = document.createElement('div');
-          tip.className = 'dlg__new';
-          tip.innerHTML = '仓库里有更新的版本 <b>' + esc(top.tag_name) + '</b>' +
-            '<button type="button" class="btn btn--sm dlg__newbtn">用它</button>';
-          tip.querySelector('.dlg__newbtn').addEventListener('click', function () {
-            save(repo, top);
-            paint(top, a.classList.contains('dev__mirror') ? 'mirror' : 'origin');
-          });
-          box.insertBefore(tip, box.firstChild);
+          if (!top) return;
+          if (top.tag_name === rel.tag_name) {
+            if (force) showTip('已经是最新版 <b>' + esc(rel.tag_name) + '</b>。');
+            return;
+          }
+          showTip('仓库里有更新的版本 <b>' + esc(top.tag_name) + '</b>' +
+            '<button type="button" class="btn btn--sm dlg__newbtn">用它</button>');
+          var btn = box.querySelector('.dlg__newbtn');
+          if (btn) {
+            btn.addEventListener('click', function () {
+              save(repo, top);
+              paint(top, a.classList.contains('dev__mirror') ? 'mirror' : 'origin');
+              curRel = top;
+            });
+          }
         })
         .catch(function () {});
     }
@@ -1127,6 +1167,7 @@
     function open(a, prefer) {
       var k = a.getAttribute('data-dev');
       var repo = RELEASE[k].repo.replace('https://github.com/', '');
+      curA = a;
       tEl.textContent = (a.getAttribute('data-name') || '') +
         (prefer === 'mirror' ? ' · 国内加速下载' : ' · 下载');
       tagEl.textContent = '获取中';
@@ -1136,6 +1177,9 @@
 
       fromManifest(k).then(function (rel) {
         if (rel) {
+          curRel = rel;
+          var stale = box.querySelector('.dlg__tip');
+          if (stale) { box.removeChild(stale); }
           paint(rel, prefer);
           if (rel.updated && noteEl) {
             noteEl.textContent = noteBase + ' 安装包清单更新于 ' + rel.updated + '。';
@@ -1159,6 +1203,27 @@
         open(a, a.classList.contains('dev__mirror') ? 'mirror' : 'origin');
       });
     });
+
+    var refBtn = $('#dlgDlRefresh');
+    if (refBtn) {
+      refBtn.addEventListener('click', function () {
+        if (!curA || !curRel) return;
+        var k = curA.getAttribute('data-dev');
+        var repo = RELEASE[k].repo.replace('https://github.com/', '');
+        refBtn.disabled = true;
+        var oldText = refBtn.textContent;
+        refBtn.textContent = '正在检查…';
+        showTip('正在核对…');
+        checkNewer(curA, k, repo, curRel, true).then(function () {
+          refBtn.disabled = false;
+          refBtn.textContent = oldText;
+          var tip = box.querySelector('.dlg__tip');
+          if (tip && tip.textContent.indexOf('正在核对') >= 0) {
+            box.removeChild(tip);
+          }
+        });
+      });
+    }
 
     $('#dlgDlX').addEventListener('click', function () { dlg.close(); });
     // 点遮罩关闭：原生 dialog 的 ::backdrop 点击时，事件目标就是 dialog 元素本身

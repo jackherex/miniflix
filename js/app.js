@@ -1115,6 +1115,67 @@
       box.insertBefore(tip, box.firstChild);
     }
 
+    /* 网络请求不能无限等：通道挂住会让弹窗一直转圈。
+       6 秒拿不到就算失败，退回清单（并明确告诉用户那可能不是最新）。 */
+    function withTimeout(promise, ms) {
+      return new Promise(function (resolve) {
+        var done = false;
+        var timer = setTimeout(function () {
+          if (!done) { done = true; resolve(null); }
+        }, ms);
+        promise.then(function (v) {
+          if (!done) { done = true; clearTimeout(timer); resolve(v); }
+        }).catch(function () {
+          if (!done) { done = true; clearTimeout(timer); resolve(null); }
+        });
+      });
+    }
+
+    function pickRel(list) {
+      if (!list || !list.length) return null;
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].assets && list[i].assets.length) return list[i];
+      }
+      return null;
+    }
+
+    /* GitHub API 和 ungh 的字段名不一样，统一成一种再往下用：
+       GitHub 是 tag_name / assets[].name / browser_download_url，
+       ungh  是 tag       / assets[].downloadUrl（没有 name，从 URL 末尾拆出来）。 */
+    function norm(rel) {
+      if (!rel) return null;
+      var tag = rel.tag_name || rel.tag;
+      var assets = (rel.assets || []).map(function (a) {
+        var url = a.browser_download_url || a.downloadUrl;
+        return {
+          name: a.name || decodeURIComponent(String(url).split('/').pop()),
+          size: a.size,
+          browser_download_url: url
+        };
+      });
+      if (!tag || !assets.length) return null;
+      return { tag_name: tag, assets: assets, updated: rel.updated };
+    }
+
+    /* 三通道，从上往下试：
+       1) gh-proxy 代理的 GitHub API —— 国内可通，实测 200 且带 CORS
+       2) ungh.cc —— 专为无 token 访问 GitHub API 的开源代理，自己有缓存层
+       3) 直连 api.github.com —— 有 CORS，但国内常连不上，放最后
+       三个都失败才算失败。 */
+    function fetchLatest(repo) {
+      var api = 'https://api.github.com/repos/' + repo + '/releases?per_page=3';
+      return tryFetch(GH_PROXY + api).then(function (list) {
+        var r = norm(pickRel(list));
+        if (r) return r;
+        return tryFetch('https://ungh.cc/repos/' + repo + '/releases/latest')
+          .then(function (d) {
+            var r2 = norm(d && d.release);
+            if (r2) return r2;
+            return tryFetch(api).then(function (l3) { return norm(pickRel(l3)); });
+          });
+      });
+    }
+
     function checkNewer(a, k, repo, rel, force) {
       var key = 'dlCheck_' + repo;
       if (!force) {
@@ -1123,45 +1184,35 @@
           sessionStorage.setItem(key, '1');
         } catch (e) {}
       }
-      var api = 'https://api.github.com/repos/' + repo + '/releases?per_page=3';
-      return tryFetch(GH_PROXY + api)
-        .then(function (list) {
-          return (list && list.length) ? list : tryFetch(api);   // 镜像不通再直连
-        })
-        .then(function (list) {
-          if (!dlg.open) return;
-          if (!list || !list.length) {
-            if (force) {
-              // 查不到也要给用户出路，而不是干瞪眼
-              showTip('没查到 —— 可能是接口限流或网络不通。' +
-                '<a href="' + GH_PROXY + '#' + RELEASE[k].repo +
-                '" target="_blank" rel="noopener">去镜像页挑最新版</a> · ' +
-                '<a href="' + RELEASE[k].latest +
-                '" target="_blank" rel="noopener">看发布页</a>');
-            }
-            return;
+      var mirrorPage = GH_PROXY + '#' + RELEASE[k].repo;
+      return fetchLatest(repo).then(function (top) {
+        if (!dlg.open) return;
+        if (!top) {
+          // 查不到：静默核对时只在「清单明显旧了」的情况下提醒，手动点则一定给反馈
+          var stale = rel.updated &&
+            (Date.now() - new Date(rel.updated).getTime()) > 36 * 3600 * 1000;
+          if (force) {
+            showTip('没查到 —— 可能是接口限流或网络不通。' +
+              '<a href="' + mirrorPage + '" target="_blank" rel="noopener">去镜像页挑最新版</a> · ' +
+              '<a href="' + RELEASE[k].latest + '" target="_blank" rel="noopener">看发布页</a>');
+          } else if (stale) {
+            showTip('清单更新于 ' + esc(rel.updated) +
+              '，可能已经不是最新 —— 没查到更新的版本，' +
+              '<a href="' + mirrorPage + '" target="_blank" rel="noopener">去镜像页确认</a>。');
           }
-          var top = null;
-          for (var i = 0; i < list.length; i++) {
-            if (list[i].assets && list[i].assets.length) { top = list[i]; break; }
-          }
-          if (!top) return;
-          if (top.tag_name === rel.tag_name) {
-            if (force) showTip('已经是最新版 <b>' + esc(rel.tag_name) + '</b>。');
-            return;
-          }
-          showTip('仓库里有更新的版本 <b>' + esc(top.tag_name) + '</b>' +
-            '<button type="button" class="btn btn--sm dlg__newbtn">用它</button>');
-          var btn = box.querySelector('.dlg__newbtn');
-          if (btn) {
-            btn.addEventListener('click', function () {
-              save(repo, top);
-              paint(top, a.classList.contains('dev__mirror') ? 'mirror' : 'origin');
-              curRel = top;
-            });
-          }
-        })
-        .catch(function () {});
+          return;
+        }
+        if (top.tag_name === rel.tag_name) {
+          if (force) showTip('已经是最新版 <b>' + esc(rel.tag_name) + '</b>。');
+          return;
+        }
+        // ⭐ 有更新就直接切过去，不再让用户多点一下「用它」——
+        //   10-10 到 10-11 连续三次给旧包，都是因为「提示了但还得手动点」没兜住。
+        save(repo, top);
+        paint(top, a.classList.contains('dev__mirror') ? 'mirror' : 'origin');
+        curRel = top;
+        showTip('已经切到最新版 <b>' + esc(top.tag_name) + '</b>。');
+      }).catch(function () {});
     }
 
     function open(a, prefer) {
@@ -1173,26 +1224,48 @@
       tagEl.textContent = '获取中';
       subEl.textContent = '正在读取最新版本…';
       box.innerHTML = '<div class="dlg__spin"><span></span>正在读取…</div>';
-      if (!dlg.open) dlg.showModal();
+      if (noteEl) { noteEl.textContent = noteBase; }
+      if (!dlg.open) { dlg.showModal(); }
 
-      fromManifest(k).then(function (rel) {
-        if (rel) {
-          curRel = rel;
-          var stale = box.querySelector('.dlg__tip');
-          if (stale) { box.removeChild(stale); }
-          paint(rel, prefer);
-          if (rel.updated && noteEl) {
-            noteEl.textContent = noteBase + ' 安装包清单更新于 ' + rel.updated + '。';
-          }
-          checkNewer(a, k, repo, rel);      // 不阻塞：先用清单秒开，再背后核对
+      // 本会话已经拿到过最新版 → 直接秒开，不再等网络
+      var hit = cached(repo);
+      if (hit) {
+        curRel = hit;
+        paint(hit, prefer);
+        if (noteEl) { noteEl.textContent = noteBase + ' 最新版 ' + hit.tag_name + '。'; }
+        return;
+      }
+
+      /* ⭐ 顺序反过来了：先去取真正的最新版，拿到才渲染。
+         清单降级成「三通道都失败」时的兜底 —— 之前是先用清单渲染再核对，
+         结果用户第一眼看到的永远是清单里的（可能是旧的）那个版本，
+         10-10 到 10-11 连续三次就这么来的。 */
+      withTimeout(fetchLatest(repo), 6000).then(function (top) {
+        if (!dlg.open) { return; }
+        if (top) {
+          save(repo, top);
+          curRel = top;
+          paint(top, prefer);
+          if (noteEl) { noteEl.textContent = noteBase + ' 最新版 ' + top.tag_name + '。'; }
           return;
         }
-        var hit = cached(repo);
-        if (hit) { paint(hit, prefer); return; }
-        return fromApi(repo).then(function (rel2) {
-          if (rel2) { save(repo, rel2); paint(rel2, prefer); } else { fallback(a, prefer); }
-        });
-      }).catch(function () { fallback(a, prefer); });
+        fromManifest(k).then(function (rel) {
+          if (!dlg.open) { return; }
+          if (rel) {
+            curRel = rel;
+            paint(rel, prefer);
+            if (noteEl) {
+              noteEl.textContent = noteBase + ' 清单记录于 ' + (rel.updated || '未知') + '。';
+            }
+            showTip('没拿到最新版本（网络不通或接口限流），下面是 ' +
+              esc(rel.updated || '清单') + ' 的记录，可能不是最新 —— ' +
+              '<a href="' + GH_PROXY + '#' + RELEASE[k].repo +
+              '" target="_blank" rel="noopener">去镜像页确认</a>');
+          } else {
+            fallback(a, prefer);
+          }
+        }).catch(function () { fallback(a, prefer); });
+      });
     }
 
     Array.prototype.forEach.call(links, function (a) {

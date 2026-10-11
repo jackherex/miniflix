@@ -34,18 +34,18 @@
     },
     "tv": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
-      "tag": "tv-app-v2.0.0-1",
-      "published": "2026-10-10T16:21:00Z",
+      "tag": "tv-app-v2.0.4-5",
+      "published": "2026-10-11T14:47:35Z",
       "assets": [
         {
-          "name": "duanjuzhijiatv-2.0.0+1-arm64-v8a.apk",
-          "size": 31785194,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v2.0.0-1/duanjuzhijiatv-2.0.0%2B1-arm64-v8a.apk"
+          "name": "duanjuzhijiatv-2.0.4+5-arm64-v8a.apk",
+          "size": 31785782,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v2.0.4-5/duanjuzhijiatv-2.0.4%2B5-arm64-v8a.apk"
         },
         {
-          "name": "duanjuzhijiatv-2.0.0+1-armeabi-v7a.apk",
-          "size": 40338430,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v2.0.0-1/duanjuzhijiatv-2.0.0%2B1-armeabi-v7a.apk"
+          "name": "duanjuzhijiatv-2.0.4+5-armeabi-v7a.apk",
+          "size": 40336862,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v2.0.4-5/duanjuzhijiatv-2.0.4%2B5-armeabi-v7a.apk"
         }
       ]
     }

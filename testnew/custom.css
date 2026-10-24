@@ -1,0 +1,50 @@
+/* 短剧之家 — 覆盖层
+ *
+ * 原站（Lumen）的品牌字标是内联 SVG 描边字，由客户端组件渲染，
+ * 无法在静态替换阶段安全改写。这里把 SVG 隐藏，用文字字标顶上，
+ * 位置、颜色、字号与原 logo 保持一致。
+ */
+
+/* 顶部导航 + 三张下载卡里的品牌字标 */
+svg[aria-label="短剧之家"] {
+  display: none !important;
+}
+
+/* 字标要在三种底上都可读：
+ *   ① 首屏黑色光束      → 白
+ *   ② 滚下去后的浅色胶囊 → 深
+ *   ③ 海报墙/深色区块上的深色胶囊 → 白
+ * 原站把胶囊底色换成了 --surface-secondary（有时 12% 有时 94%），
+ * 而 --foreground 恒为深色，所以没法靠继承拿对颜色。
+ * 用 difference 混合让字标自动取反底色，一处规则覆盖全部情况。 */
+a[aria-label="短剧之家 首页"]::before {
+  content: "短剧之家";
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+/* 下载卡头部只剩右侧编号，左侧留白用字标补位 */
+.lumen-card .flex.h-5.items-center.justify-between::before {
+  content: "短剧之家";
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+}
+
+/* 原站「性能全面提升 / 与 Emby 实测对比」那组数据是 Lumen 自家服务器的
+ * 测量结果，与短剧之家无关，直接隐藏，避免出现无法证实的数字。
+ * 同时让同排剩下的那张卡铺满整行，否则右侧会留一个大洞。 */
+.lumen-bench {
+  display: none !important;
+}
+
+.lumen-card:has(+ .lumen-bench) {
+  grid-column: 1 / -1;
+}

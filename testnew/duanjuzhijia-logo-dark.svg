@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100%" height="100%" viewBox="0 0 3528 670" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+  <!-- 替换原站 LUMEN 字标。
+       父级 <image> 只露出 1296..3528 / 249..466 这个窗口，
+       原字标在这块窗口里是「满宽、字高约 190」的宽字距排版。
+       中文 4 字撑不满 2232 宽（撑满会变成字间距夸张的一排字），
+       所以按同样字高、左对齐、适度字距排，读起来是一个正常字标。 -->
+  <text x="1300" y="433"
+        font-family="PingFang SC, Microsoft YaHei, Noto Sans SC, sans-serif"
+        font-size="210" font-weight="700" letter-spacing="60"
+        fill="#ffffff">短剧之家</text>
+</svg>

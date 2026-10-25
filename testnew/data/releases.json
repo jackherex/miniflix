@@ -1,0 +1,53 @@
+{
+  "_comment": "各端最新 release 的安装包清单，供下载弹窗直接读取。⚠️ 每发布一个新版本就要跑一次 build/update_releases.py，否则弹窗给的还是旧包。弹窗优先读这个文件：同站、无限流、秒开；打开弹窗时还会静默去 GitHub 核对一次 tag，发现不一致会就地更新。",
+  "_update_cmd": "python build/update_releases.py",
+  "updated": "2026-10-25",
+  "ends": {
+    "phone": {
+      "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
+      "tag": "v2-app-v1.0.92-93",
+      "published": "2026-10-24T01:27:50Z",
+      "assets": [
+        {
+          "name": "duanjuzhijia2-1.0.92+93-arm64-v8a.apk",
+          "size": 35889774,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v1.0.92-93/duanjuzhijia2-1.0.92%2B93-arm64-v8a.apk"
+        }
+      ]
+    },
+    "pc": {
+      "repo": "https://github.com/jackherex/duanjuzhijia-down-pc",
+      "tag": "pc-app-v2.0.16-92",
+      "published": "2026-10-24T01:31:17Z",
+      "assets": [
+        {
+          "name": "duanjuzhijia2-2.0.16+92-setup.exe",
+          "size": 89325376,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v2.0.16-92/duanjuzhijia2-2.0.16%2B92-setup.exe"
+        },
+        {
+          "name": "duanjuzhijia2-2.0.16+92-windows-x64.zip",
+          "size": 123036026,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v2.0.16-92/duanjuzhijia2-2.0.16%2B92-windows-x64.zip"
+        }
+      ]
+    },
+    "tv": {
+      "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
+      "tag": "tv-app-v3.0.22-36",
+      "published": "2026-10-24T01:23:45Z",
+      "assets": [
+        {
+          "name": "duanjuzhijiatv-3.0.22+36-arm64-v8a.apk",
+          "size": 31973966,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v3.0.22-36/duanjuzhijiatv-3.0.22%2B36-arm64-v8a.apk"
+        },
+        {
+          "name": "duanjuzhijiatv-3.0.22+36-armeabi-v7a.apk",
+          "size": 40550194,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v3.0.22-36/duanjuzhijiatv-3.0.22%2B36-armeabi-v7a.apk"
+        }
+      ]
+    }
+  }
+}

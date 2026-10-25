@@ -137,13 +137,21 @@
   }
 
   var verified = {};
-  function verify(meta, shownTag, cb) {
-    if (verified[meta.slug]) return;
-    verified[meta.slug] = 1;
+  /* 静默跟 GitHub 核一次 tag。
+     force=true 时忽略「本会话已核过」—— 点按钮走这条路，保证**每次点击都现查**；
+     卡片上那行版本号用默认（每端每会话一次），避免每开一个页面就打三次 API。
+     核不到（限流/不通）就什么都不做，继续用清单里的数据，绝不打断下载。 */
+  function verify(meta, shownTag, cb, force, onDone) {
+    if (!force) {
+      if (verified[meta.slug]) return;
+      verified[meta.slug] = 1;
+    }
     apiLatest(meta).then(function (rel) {
-      if (!rel) return;
-      cacheSet(meta.slug, rel);
-      if (!shownTag || rel.tag !== shownTag) cb(rel);
+      if (rel) {
+        cacheSet(meta.slug, rel);
+        if (!shownTag || rel.tag !== shownTag) cb(rel);
+      }
+      if (onDone) onDone();
     });
   }
 
@@ -159,6 +167,7 @@
 
   // ------------------------------------------------------------ 弹窗
   var dlg = null, bodyEl = null, tagEl = null, subEl = null;
+  var curMeta = null, curRel = null;
 
   function ensureDlg() {
     if (dlg && !dlg.isConnected) dlg = null;   // 被整树重渲染带走就重造
@@ -238,6 +247,8 @@
   }
 
   function fill(meta, rel, prefer) {
+    curMeta = meta;
+    curRel = rel;
     tagEl.textContent = meta.name + (rel.tag ? ' · ' + rel.tag : '');
     subEl.textContent = '共 ' + rel.assets.length + ' 个安装包，挑一个下载：';
     bodyEl.innerHTML = rel.assets.map(function (a) { return row(a, prefer); }).join('');
@@ -249,6 +260,8 @@
       return;
     }
     dlg.setAttribute('data-slug', meta.slug);
+    curMeta = null;
+    curRel = null;
     tagEl.textContent = meta.name;
     subEl.textContent = '正在获取最新版…';
     bodyEl.innerHTML = '<div style="padding:26px 0;text-align:center;font-size:12.5px;' +
@@ -258,9 +271,16 @@
       if (!dlg.open) return;               // 用户已经关掉了
       if (!rel) { tagEl.textContent = meta.name; subEl.textContent = '取不到最新版'; fallback(meta, prefer); return; }
       fill(meta, rel, prefer);
-      // 清单过期的话，核对完就地换掉列表
+      /* 先把清单里的画出来（秒开），**然后每次都去 GitHub 现查一遍**。
+         这一步不受 sessionStorage 的 10 分钟缓存限制，也不受「本会话已核过」限制：
+         用户在页面上挂了一整天、中途发了新版，再点一次也能拿到新的。 */
+      subEl.textContent = '正在核对最新版…';
       verify(meta, rel.tag, function (fresh) {
-        if (dlg.open && dlg.getAttribute('data-slug') === meta.slug) fill(meta, fresh, prefer);
+        if (dlg.open && curMeta === meta) fill(meta, fresh, prefer);
+      }, true, function () {
+        if (dlg.open && curMeta === meta && curRel && subEl.textContent === '正在核对最新版…') {
+          subEl.textContent = '共 ' + curRel.assets.length + ' 个安装包，挑一个下载：';
+        }
       });
     });
   }

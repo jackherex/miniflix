@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>短剧之家 — 把好剧，装进口袋</title>
+<meta name="description" content="短剧之家 · 海量短剧免费观看。无感加载下集、离线弹幕、批量下载、WebDAV 全端同步播放记录，手机、电脑与电视三端通用。">
+<meta name="keywords" content="短剧,免费短剧,短剧App,短剧下载,漫剧,AI短剧,弹幕,离线缓存,WebDAV,画质增强">
+<meta name="author" content="短剧之家">
+<meta name="robots" content="index,follow">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<link rel="canonical" href="https://jackherex.github.io/miniflix/">
+
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="mask-icon" href="assets/logo.svg" color="#ff2d55">
+
+<!-- 社交分享卡：微信 / QQ / 微博 / Twitter / Facebook 抓这些标签生成预览。
+     ⚠️ og:image 必须是**绝对地址**，相对路径各家抓取器都不认；
+        且用 1200×630（1.91:1）才是各平台都完整的比例。 -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="短剧之家">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:url" content="https://jackherex.github.io/miniflix/">
+<meta property="og:title" content="短剧之家 — 把好剧，装进口袋">
+<meta property="og:description" content="真人短剧、漫剧、AI 短剧一处看全。无感加载下集、离线弹幕、批量下载、WebDAV 全端同步 —— 手机、电脑、电视三端通用，完全免费，没有广告。">
+<meta property="og:image" content="https://jackherex.github.io/miniflix/assets/og-cover.jpg">
+<meta property="og:image:secure_url" content="https://jackherex.github.io/miniflix/assets/og-cover.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="短剧之家 — 把好剧，装进口袋">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="短剧之家 — 把好剧，装进口袋">
+<meta name="twitter:description" content="真人短剧、漫剧、AI 短剧一处看全。三端通用，完全免费，没有广告。">
+<meta name="twitter:image" content="https://jackherex.github.io/miniflix/assets/og-cover.jpg">
+
+<!-- 结构化数据：让搜索引擎把它当成一个「免费多媒体应用」而不是普通网页 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "短剧之家",
+  "alternateName": "Duanju Home",
+  "url": "https://jackherex.github.io/miniflix/",
+  "description": "真人短剧、漫剧、AI 短剧一处看全。支持无感加载下集、离线弹幕、批量下载、WebDAV 全端同步与电脑版画质增强。",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Android, Windows, Android TV",
+  "inLanguage": "zh-CN",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+  "featureList": [
+    "无感加载下集", "离线弹幕", "批量下载带弹幕",
+    "多个热播榜单", "查全季自动连播", "WebDAV 播放记录同步", "电脑版画质增强"
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="css/main.css?v=34">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="#top" aria-label="短剧之家首页">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+        <path d="M8.5 5.2v13.6c0 .9 1 1.4 1.7.9l10.3-6.8c.7-.4.7-1.4 0-1.8L10.2 4.3c-.7-.5-1.7 0-1.7.9Z" fill="currentColor"/>
+        <path d="M3.6 5.8v12.4c0 .8.9 1.3 1.6.9l3.2-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>
+      </svg>
+      <span>短剧之家</span>
+    </a>
+    <nav class="nav__links" aria-label="页面导航">
+      <a href="#exclusive">独家功能</a>
+      <a href="#devices">三端下载</a>
+      <a href="#faq">常见问题</a>
+      <a href="https://t.me/duanjuzhijia" target="_blank" rel="noopener">官方群</a>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--ghost btn--sm" href="#devices">下载</a>
+    </div>
+    <button class="nav__toggle" id="navToggle" aria-label="展开菜单" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </div>
+  <div class="nav__progress" id="navProgress" aria-hidden="true"></div>
+</header>
+
+<!-- 章节序号导航：滚动到功能区时在右侧显示 / 07 -->
+<nav class="chap" id="chapNav" aria-hidden="true"></nav>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__vignette" aria-hidden="true"></div>
+    <div class="hero__inner">
+      <p class="hero__eyebrow reveal">全新 v2 · 手机 / 电脑 / 电视三端</p>
+      <h1 class="hero__title reveal" data-delay="1" data-split>
+        <span>把好剧</span>
+        <span class="hero__title-em">装进口袋</span>
+      </h1>
+      <p class="hero__sub reveal" data-delay="2">
+        真人短剧、漫剧、AI 短剧，一处看全。<br>
+        没有广告，没有等待，只有下一集。
+      </p>
+      <div class="hero__cta reveal" data-delay="3">
+        <a class="btn btn--primary" href="#devices">免费下载</a>
+        <a class="btn btn--text" href="#exclusive">
+          看看独在哪
+          <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__stage" id="heroStage" aria-hidden="true">
+      <div class="stage3d" id="stage3d"></div>
+      <div class="stage__fade"></div>
+    </div>
+  </section>
+
+  <!-- ============ 独家功能 总览 ============ -->
+  <section class="excl-intro" id="exclusive">
+    <div class="wrap">
+      <div class="sec-head sec-head--filet reveal">
+        <h2 class="sec-title">这八件事，<br>别家做不了</h2>
+        <p class="sec-sub">不是花哨的噱头，是每天都会用到的实在东西。</p>
+      </div>
+
+      <div class="excl-grid">
+        <a class="excl reveal spot tilt" href="#f-next">
+          <span class="excl__no">01</span>
+          <h3 class="excl__t">无感加载下集</h3>
+          <p class="excl__d">还在看这集，下一集已经在后台准备好了。播完自动接上，中间没有等待圈。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="excl reveal spot tilt" data-delay="1" href="#f-danmaku">
+          <span class="excl__no">02</span>
+          <h3 class="excl__t">弹幕看得更爽</h3>
+          <p class="excl__d">完整弹幕引擎，支持屏蔽词过滤、透明度调节，追剧的时候有人陪着一起笑。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="excl reveal spot tilt" data-delay="2" href="#f-batch">
+          <span class="excl__no">03</span>
+          <h3 class="excl__t">批量下载带弹幕</h3>
+          <p class="excl__d">整季一键缓存，视频和弹幕一起存下来。断网也能看，而且弹幕照样飘。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="excl reveal spot tilt" data-delay="3" href="#f-rank">
+          <span class="excl__no">04</span>
+          <h3 class="excl__t">多个热播榜单</h3>
+          <p class="excl__d">总热播榜、真人剧榜、漫剧榜、AI 剧榜，每天更新。不知道看什么的时候，跟着榜走就行。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="excl reveal spot tilt" data-delay="4" href="#f-season">
+          <span class="excl__no">05</span>
+          <h3 class="excl__t">查全季 · 自动连播</h3>
+          <p class="excl__d">一部剧有很多季，它自己会找。看到最后一集，还会顺手问你要不要接着看下一季。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="excl reveal spot tilt" data-delay="5" href="#f-sync">
+          <span class="excl__no">06</span>
+          <h3 class="excl__t">全端播放记录同步</h3>
+          <p class="excl__d">接上你自己的 WebDAV，手机上看到第 17 集，电脑打开就接着播。不经过任何第三方服务器。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="excl reveal excl--wide spot tilt" data-delay="6" href="#f-hq">
+          <span class="excl__no">07</span>
+          <h3 class="excl__t">电脑版画质增强</h3>
+          <p class="excl__d">内置实时神经超分，1080P 片源最高推到 4K。逐帧重建线条，不是粗暴放大。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="excl reveal excl--wide spot tilt" data-delay="7" href="#f-reserve">
+          <span class="excl__no">08</span>
+          <h3 class="excl__t">预约追更</h3>
+          <p class="excl__d">在追的剧点一下预约，更新当天直接来提醒你，不用自己记时间、不用反复去翻。</p>
+          <span class="excl__go">了解详情
+            <svg viewBox="0 0 12 12" width="12" height="12"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 1：无感加载下集 ============ -->
+  <section class="feature feature--dark" id="f-next">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>01</i>无感加载下集</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>下一集，<br>早在等你</h2>
+        <p class="feature__text reveal" data-delay="2">
+          播放器会根据网速和你的观看进度，提前把下一集的视频拉到本地缓冲。
+          这一集刚结束，下一集已经就绪 —— 没有转圈，没有加载页。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>智能预载</b>播放中后台拉取，不抢当前播放的带宽</li>
+          <li><b>无缝衔接</b>片尾直接续播，不再手动点下一集</li>
+          <li><b>弱网兜底</b>检测到网速差自动跳过预载，不拖累当前集</li>
+        </ul>
+      </div>
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="nextmock">
+          <div class="nextmock__frame">
+            <img id="nextCover" alt="" loading="lazy">
+            <div class="nextmock__scrim"></div>
+            <div class="nextmock__progress"><i></i></div>
+            <div class="nextmock__badge">
+              <span class="nextmock__dot"></span> 已预载完成
+            </div>
+          </div>
+          <div class="nextmock__strip">
+            <div class="nextmock__item nextmock__item--playing">
+              <img id="nextNow" alt="" loading="lazy">
+              <div><b>正在播放</b><span id="nextNowTitle">—</span></div>
+            </div>
+            <div class="nextmock__arrow">
+              <span class="nextmock__arrowline"></span>
+            </div>
+            <div class="nextmock__item nextmock__item--ready">
+              <img id="nextUp" alt="" loading="lazy">
+              <div><b>已就绪</b><span id="nextUpTitle">—</span></div>
+            </div>
+          </div>
+          <div class="nextmock__foot">
+            <span>缓冲进度</span>
+            <span class="nextmock__pct" id="nextPct">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 2：弹幕 ============ -->
+  <section class="feature feature--flip" id="f-danmaku">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>02</i>弹幕</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>一个人看，<br>也不孤单</h2>
+        <p class="feature__text reveal" data-delay="2">
+          完整的弹幕系统，按时间轴精准对齐。想安静看就一键关掉，
+          或者把不想看到的词加进屏蔽名单 —— 界面干净，爽感自己定。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>精准同步</b>跟着播放位置实时滚动，拖动进度条立即跟上</li>
+          <li><b>屏蔽词</b>自定义过滤规则，讨厌的词再也不会出现</li>
+          <li><b>随时开关</b>一键隐藏或展开，不影响播放流畅度</li>
+        </ul>
+      </div>
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="dmmock">
+          <div class="dmmock__screen" id="dmmockScreen">
+            <img id="dmCover" alt="" loading="lazy">
+            <div class="dmmock__scrim"></div>
+            <!-- 弹幕泳道由 buildDanmaku() 生成：一条泳道一条文字，互不重叠 -->
+            <div class="dmmock__dm" id="dmLanes" aria-hidden="true"></div>
+            <div class="dmmock__ctrl">
+              <button class="dmmock__btn dmmock__btn--on" data-dm="toggle">弹幕 · 开</button>
+              <button class="dmmock__btn" data-dm="block">屏蔽词 3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 3：批量下载（带弹幕） ============ -->
+  <section class="feature feature--dark feature--stage" id="f-batch">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>03</i>批量下载</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>整季存下来，<br>弹幕一起走</h2>
+        <p class="feature__text reveal" data-delay="2">
+          选中整季，剩下交给它。视频和弹幕打包存在本地，
+          飞机上、地铁里、回老家的路上 —— 断网也能看，弹幕照样飘。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>整季批量</b>一次勾选全部剧集，自动排队下载</li>
+          <li><b>弹幕同行</b>下载视频时一并保存弹幕，离线播放不丢失</li>
+          <li><b>画质自选</b>省流 / 标清 / 高清，按你的流量和存储挑</li>
+        </ul>
+      </div>
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="dlmock">
+          <div class="dlmock__head">
+            <span class="dlmock__ic">
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 18h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <div class="dlmock__t">《<span id="dlShowName">—</span>》整季</div>
+              <div class="dlmock__s" id="dlCount">共 0 集 · 含弹幕</div>
+            </div>
+            <span class="dlmock__all">全选</span>
+          </div>
+          <div class="dlmock__rows" id="dlRows"></div>
+          <div class="dlmock__foot">
+            <div class="dlmock__bar"><i id="dlBar"></i></div>
+            <div class="dlmock__ftxt">
+              <span id="dlSpeed">3.2 MB/s</span>
+              <span class="dlmock__pct" id="dlPct">0%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 4：热播榜单 ============ -->
+  <section class="feature feature--flip" id="f-rank">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>04</i>热播榜单</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>不知道看什么，<br>就跟着榜走</h2>
+        <p class="feature__text reveal" data-delay="2">
+          总热播榜、真人剧榜、漫剧榜、AI 剧榜 —— 四个维度各有一份榜。
+          热度、收藏、更新时间都摆在明面上，每天跟着最新数据走。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>四个榜单</b>综合热播 / 真人剧 / 漫剧 / AI 剧，各有各的口味</li>
+          <li><b>真实热度</b>热度值与收藏数直接来自站源，不是编辑手填</li>
+          <li><b>每日更新</b>每天重算一次排名，刚火的剧也能第一时间上榜</li>
+          <li><b>一键直达</b>在榜上点一部，直接进详情页开播</li>
+        </ul>
+      </div>
+
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="rankmock">
+          <div class="rankmock__head">
+            <span class="rankmock__ic">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 20V11M12 20V5.5M18.5 20v-6"/></svg>
+            </span>
+            <div class="rankmock__hd">
+              <div class="rankmock__t" id="rankBoardName">总热播榜</div>
+              <div class="rankmock__s" id="rankBoardDesc">每日更新</div>
+            </div>
+            <span class="rankmock__live"><i></i>实时</span>
+          </div>
+
+          <div class="rankmock__tabs" id="rankTabs" role="tablist" aria-label="榜单切换"></div>
+
+          <div class="rankmock__list" id="rankList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 5：查全季 · 自动连播 ============ -->
+  <section class="feature feature--dark feature--stage" id="f-season">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>05</i>查全季 · 自动连播</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>看完这季，<br>还有下一季</h2>
+        <p class="feature__text reveal" data-delay="2">
+          很多短剧一部拍好几季，标题里的季号藏在名字最后。
+          短剧之家会自动把同一部剧的各季归到一起 —— 你不必自己猜、自己搜。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>自动归季</b>进详情页就顺手查一次，同系列的季自动聚齐</li>
+          <li><b>一眼看清</b>按钮直接显示「全 5 季」，不用点开才知道有没有</li>
+          <li><b>自动连播</b>一集播完自动进入下一集，可随时关掉</li>
+          <li><b>看完追问</b>整季看完后自动查下一季，找到就提示你去观看</li>
+        </ul>
+      </div>
+
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="seasmock">
+          <div class="seasmock__head">
+            <div class="seasmock__name">大唐憨婿<span>· 共 3 季</span></div>
+            <div class="seasmock__hint">当前是第 2 季，下一季是第 3 季。</div>
+          </div>
+
+          <div class="seasmock__seasons" id="seasList"></div>
+
+          <div class="seasmock__toast" id="seasToast">
+            <span class="seasmock__tick">
+              <svg viewBox="0 0 12 12" width="11" height="11"><path d="M2 6.2 4.6 8.8 10 3.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="seasmock__txt" id="seasToastText">已找到下一季，要不要接着看？</span>
+            <span class="seasmock__act">去观看</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 6：WebDAV 同步 ============ -->
+  <section class="feature feature--flip" id="f-sync">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>06</i>播放记录同步</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>看到哪了，<br>自己记得</h2>
+        <p class="feature__text reveal" data-delay="2">
+          不用注册账号，不用登录。接上你自己的 WebDAV ——
+          群晖、坚果云、OpenList 都行 —— 手机和电脑的播放进度自动对齐，
+          数据只存在你自己的盘里。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>免注册</b>不提供手机号，不绑定邮箱，没有云端账号</li>
+          <li><b>数据自主</b>记录存在你的 WebDAV 里，我们不碰</li>
+          <li><b>冲突合并</b>两端同时看过同一集，自动保留最新的进度</li>
+          <li><b>多机隔离</b>一个账号带多台设备时，可以分空间互不干扰</li>
+        </ul>
+        <a class="btn btn--text feature__more reveal" data-delay="4" href="webdav.html">
+          坚果云 / 群晖 / OpenList 怎么填，看图文教程
+          <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M4.3 2.2 8.5 6l-4.2 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="syncmock">
+          <div class="syncmock__node syncmock__node--phone">
+            <span class="syncmock__ico">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2.4"/><path d="M11 5.5h2"/></svg>
+            </span>
+            <span class="syncmock__lbl">手机</span>
+            <span class="syncmock__pos" id="syncPhonePos">第 17 集 12:31</span>
+          </div>
+
+          <div class="syncmock__mid">
+            <span class="syncmock__line"></span>
+            <span class="syncmock__cloud">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6.5 18.5h11a3.5 3.5 0 0 0 .4-6.98 5.5 5.5 0 0 0-10.62-1.6A4 4 0 0 0 6.5 18.5Z"/>
+              </svg>
+            </span>
+            <span class="syncmock__line"></span>
+          </div>
+
+          <div class="syncmock__node syncmock__node--pc">
+            <span class="syncmock__ico">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2.5" y="4" width="19" height="12.5" rx="1.8"/><path d="M8 20h8M12 16.5V20"/></svg>
+            </span>
+            <span class="syncmock__lbl">电脑</span>
+            <span class="syncmock__pos" id="syncPcPos">第 17 集 12:31</span>
+          </div>
+
+          <div class="syncmock__tag" id="syncTag">
+            <span class="syncmock__tick">
+              <svg viewBox="0 0 12 12" width="10" height="10"><path d="M2 6.2 4.6 8.8 10 3.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span id="syncTagText">已通过 WebDAV 同步</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 7：画质增强（电脑版） ============ -->
+  <section class="feature feature--dark" id="f-hq">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>07</i>画质增强 · 电脑版</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>1080，<br>也能看出 4K 的样子</h2>
+        <p class="feature__text reveal" data-delay="2">
+          电脑版内置实时超分引擎。1080P 的片源喂进去，输出分辨率最高推到
+          4K —— 不是简单拉大，而是逐帧重建线条和纹理，画面越糊越明显。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>神经超分</b>动漫用 Anime4K 专线，真人用 FSRCNNX，各有一套网络</li>
+          <li><b>实时处理</b>播放时逐帧计算，不转码、不占用磁盘、不等待</li>
+          <li><b>原画对比</b>一键在增强与原画之间来回切，好坏自己看</li>
+          <li><b>自动降级</b>显卡吃力或电池供电时自动退回原画，绝不为画质卡顿</li>
+        </ul>
+      </div>
+
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="hqmock">
+          <div class="hqmock__bar">
+            <span class="hqmock__pill hqmock__pill--live">
+              <i></i>实时增强中
+            </span>
+            <span class="hqmock__cmp" id="hqCmp">原画对比</span>
+          </div>
+
+          <div class="hqmock__frame">
+            <img id="hqCover" alt="" loading="lazy" decoding="async">
+            <div class="hqmock__scrim"></div>
+
+            <div class="hqmock__split" id="hqSplit">
+              <span class="hqmock__handle">
+                <svg viewBox="0 0 12 12" width="11" height="11"><path d="M4.4 2.4 2.4 6l2 3.6M7.6 2.4 9.6 6l-2 3.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </div>
+
+            <span class="hqmock__tag hqmock__tag--l">原画 1080P</span>
+            <span class="hqmock__tag hqmock__tag--r">增强 4K</span>
+          </div>
+
+          <div class="hqmock__res">
+            <span class="hqmock__from">1920 × 1080</span>
+            <span class="hqmock__arrow">
+              <svg viewBox="0 0 24 12" width="26" height="13"><path d="M1 6h20m0 0-4-3.4M21 6l-4 3.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="hqmock__to" id="hqTo">3840 × 2160</span>
+            <span class="hqmock__badge">4K</span>
+          </div>
+
+          <div class="hqmock__modes">
+            <span class="hqmock__mode">关闭</span>
+            <span class="hqmock__mode">自动</span>
+            <span class="hqmock__mode hqmock__mode--on">清晰优先</span>
+            <span class="hqmock__mode">省电增强</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能 8：预约追更 ============ -->
+  <section class="feature feature--flip" id="f-reserve">
+    <div class="wrap feature__wrap">
+      <div class="feature__copy">
+        <p class="feature__eyebrow"><i>08</i>预约追更</p>
+        <h2 class="feature__title reveal" data-delay="1" data-split>想看的剧，<br>上线就来叫你</h2>
+        <p class="feature__text reveal" data-delay="2">
+          追的剧不知道什么时候更新，只能隔三差五自己去翻。
+          点一下预约，到点了它会直接提醒你 —— 不用记、不用蹲。
+        </p>
+        <ul class="feature__list reveal" data-delay="3">
+          <li><b>一键预约</b>详情页点一下就行，已追的在追的剧里统一管理</li>
+          <li><b>到点提醒</b>更新当天推送通知，点开直接进播放</li>
+          <li><b>开播预告</b>还没上线的剧也能先预约，上线第一时间知道</li>
+          <li><b>不漏更新</b>多部剧同时追，各自记各自的时间</li>
+        </ul>
+      </div>
+
+      <div class="feature__visual reveal wipe" data-delay="2">
+        <div class="resmock">
+          <div class="resmock__head">
+            <div class="resmock__title">我的追更</div>
+            <div class="resmock__count" id="resCount">3 部待更新</div>
+          </div>
+
+          <div class="resmock__list" id="resList"></div>
+
+          <div class="resmock__foot">
+            <span class="resmock__bell" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 3a5.2 5.2 0 0 0-5.2 5.2v3.1L5 14.2h14l-1.8-2.9V8.2A5.2 5.2 0 0 0 12 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.6 17a2.5 2.5 0 0 0 4.8 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="resmock__hint">更新当天会来提醒你</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 三端 ============ -->
+  <section class="devices" id="devices">
+    <div class="wrap">
+      <div class="sec-head sec-head--filet reveal">
+        <h2 class="sec-title">手机、电脑和电视，<br>都给你准备好了</h2>
+        <p class="sec-sub">同一套内核，三种屏幕的体验各自打磨。</p>
+      </div>
+      <div class="dev-grid dev-grid--3">
+        <div class="dev reveal spot tilt">
+          <div class="dev__art dev__art--phone">
+            <svg viewBox="0 0 64 64" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="19" y="6" width="26" height="52" rx="5"/><path d="M28 12h8"/></svg>
+          </div>
+          <h3 class="dev__name">Android 手机版</h3>
+          <p class="dev__desc">
+            随身追剧主力。后台播放、离线缓存、弹幕全功能，
+            竖屏横屏都适配。
+          </p>
+          <ul class="dev__feat">
+            <li>无感加载下集</li>
+            <li>离线弹幕</li>
+            <li>批量下载</li>
+            <li>WebDAV 同步</li>
+          
+            <li>预约追更</li>
+            <li>后台播放</li>
+          </ul>
+          <a class="btn btn--primary dev__btn" id="devPhoneBtn" data-dev="phone" data-name="手机版" href="https://github.com/jackherex/duanjuzhijia-down-phone/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="dev__mirror" id="devPhoneMirror" data-dev="phone" data-name="手机版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-phone" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            国内加速下载
+          </a>
+          <div class="dev__meta" id="devPhoneMeta">APK · 约 30.1 MB</div>
+        </div>
+        <div class="dev reveal spot tilt" data-delay="1">
+          <div class="dev__art dev__art--pc">
+            <svg viewBox="0 0 64 64" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="8" y="12" width="48" height="32" rx="3"/><path d="M24 52h16M32 44v8"/></svg>
+          </div>
+          <h3 class="dev__name">Windows 电脑版</h3>
+          <p class="dev__desc">
+            大屏看剧更爽。免安装绿色版，解压就用，
+            支持画质增强与键盘快捷键。
+          </p>
+          <ul class="dev__feat">
+            <li>1080P 增到 4K</li>
+            <li>无感加载下集</li>
+            <li>离线弹幕</li>
+            <li>WebDAV 同步</li>
+          
+            <li>预约追更</li>
+            <li>键盘快捷键</li>
+          </ul>
+          <a class="btn btn--primary dev__btn" id="devPcBtn" data-dev="pc" data-name="电脑版" href="https://github.com/jackherex/duanjuzhijia-down-pc/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="dev__mirror" id="devPcMirror" data-dev="pc" data-name="电脑版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-pc" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            国内加速下载
+          </a>
+          <div class="dev__meta" id="devPcMeta">ZIP · 约 90.7 MB</div>
+        </div>
+        <div class="dev reveal spot tilt" data-delay="2">
+          <div class="dev__art dev__art--tv">
+            <svg viewBox="0 0 64 64" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="6" y="10" width="52" height="34" rx="3"/><path d="M22 52h20M32 44v8"/><path d="M20 6l-4 4M44 6l4 4" opacity=".55"/></svg>
+          </div>
+          <h3 class="dev__name">Android TV 盒子版</h3>
+          <p class="dev__desc">
+            遥控器能用，手机更好用 —— 扫码连上就能在手机上搜剧、点播。
+            按需发布，没找到包时可用手机版投屏。
+          </p>
+          <ul class="dev__feat">
+            <li>手机扫码操控</li>
+            <li>遥控器适配</li>
+            <li>大屏布局</li>
+            <li>无感加载下集</li>
+            <li>离线弹幕</li>
+          
+            <li>预约追更</li>
+          </ul>
+          <a class="btn btn--primary dev__btn" id="devTvBtn" data-dev="tv" data-name="TV 盒子版" href="https://github.com/jackherex/duanjuzhijia-down-tv/releases/latest" target="_blank" rel="noopener">前往下载</a>
+          <a class="dev__mirror" id="devTvMirror" data-dev="tv" data-name="TV 盒子版" href="https://gh-proxy.com/#https://github.com/jackherex/duanjuzhijia-down-tv" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            国内加速下载
+          </a>
+          <div class="dev__meta" id="devTvMeta">APK · 按需发布</div>
+        </div>
+      </div>
+      <p class="dev-note reveal">
+        TV 盒子版为独立维护，仅在确有更新时发布安装包 —— 点「前往下载」可在发布页翻找历史上传的 TV 包。
+        <br>
+        「国内加速下载」走第三方镜像 gh-proxy.com —— 打开就是该仓库的发布列表，
+        选好版本和架构再下载，不用进 GitHub。TV 端 arm64 和 armeabi-v7a 两个包都有，
+        按自己盒子挑。文件由镜像转发，我们不改包。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ TV 手机操控 ============ -->
+  <section class="tvctl" id="tvctl">
+    <div class="wrap">
+      <div class="sec-head sec-head--filet reveal">
+        <h2 class="sec-title">遥控器慢慢按？<br>不用了</h2>
+        <p class="sec-sub">
+          TV 版支持手机扫码操控。扫一下电视上的二维码连上，
+          之后搜剧、播放、翻历史都在手机上点 —— 电视只管放。
+        </p>
+      </div>
+
+      <div class="tvctl__grid">
+        <div class="tvcard reveal">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">搜剧</h3>
+          <p class="tvcard__d">手机上打字搜，比用遥控器一个字母一个字母按快得多。</p>
+        </div>
+
+        <div class="tvcard reveal" data-delay="1">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 5.2v13.6l11-6.8z"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">播放</h3>
+          <p class="tvcard__d">手机上点哪一集，电视就放哪一集，不用再拿遥控器翻列表。</p>
+        </div>
+
+        <div class="tvcard reveal" data-delay="2">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7.4V12l3.2 2"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">播放历史</h3>
+          <p class="tvcard__d">看过的都在手机上一列摆开，找昨天那部不用重新搜。</p>
+        </div>
+
+        <div class="tvcard reveal" data-delay="3">
+          <span class="tvcard__ico">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 4.5v5h5"/><path d="M3.6 15a9 9 0 1 0 2.1-9.4L3 9.5"/>
+            </svg>
+          </span>
+          <h3 class="tvcard__t">继续播放</h3>
+          <p class="tvcard__d">看到第几集第几分钟都记着，手机上一点，电视接着往下放。</p>
+        </div>
+      </div>
+
+      <p class="tvctl__note reveal">
+        在 TV 版里打开手机操控，用手机扫电视上显示的二维码就连上了。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="sec-head sec-head--filet reveal">
+        <h2 class="sec-title">常见问题</h2>
+      </div>
+      <div class="faq__list" id="faqList">
+        <details class="faq__item reveal">
+          <summary>官网上的剧集点进去能直接播吗？<span class="faq__sign"></span></summary>
+          <div class="faq__body">官网上的剧集只做展示，帮你了解有哪些内容。想真正播放，请下载手机版、电脑版或 TV 盒子版客户端，全部内容都在里面。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>下载太慢，或者 GitHub 打不开怎么办？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            每张下载卡的主按钮下面还有一个<b>「国内加速下载」</b>，它走第三方镜像
+            <a href="https://gh-proxy.com/" target="_blank" rel="noopener">gh-proxy.com</a>。
+            打开是该仓库的发布列表，选好版本和架构之后走镜像下载，全程不用进 GitHub。
+            安装包仍然来自我们自己的 GitHub 发布页，镜像只负责转发，我们不经手、也不改包。
+            镜像哪天不好用了，换回上面的「前往下载」走原站就行。
+          </div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>下载按钮为什么跳转到 GitHub？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            我们的安装包统一放在 GitHub 的发布页里。点下载按钮会直接打开最新版本的发布页面，
+            你可以在那里看到版本号、更新说明和全部安装包，按需选择下载。
+            这样做的好处是：无论我们更新到哪一版，官网永远指向最新的那个，不会给你旧版本。
+          </div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>要收费吗？会有广告吗？<span class="faq__sign"></span></summary>
+          <div class="faq__body">完全免费，不设 VIP，也没有贴片广告。App 内所有剧集都能直接观看。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>WebDAV 同步要怎么设置？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            在设置里找到「播放记录同步」，填入你的 WebDAV 地址、账号和密码即可。
+            支持群晖、坚果云、OpenList 等标准 WebDAV 服务，内网自建的 http 地址也支持。
+            不需要注册任何账号，记录直接存在你自己的盘里。
+            想要一步一步的图文说明，看
+            <a href="webdav.html">WebDAV 同步教程</a>。
+          </div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>下载的弹幕在断网时还能看吗？<span class="faq__sign"></span></summary>
+          <div class="faq__body">可以。批量下载时会把弹幕一起保存到本地，离线播放时照常显示，跟在线观看没有区别。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Android 装不上怎么办？<span class="faq__sign"></span></summary>
+          <div class="faq__body">本应用未上架应用商店，安装时系统可能提示"未知来源"。请到系统设置里允许该来源安装即可。若提示解析失败，说明设备架构不匹配，请确认你的手机是 arm64 机型。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Windows 版怎么用？<span class="faq__sign"></span></summary>
+          <div class="faq__body">下载 ZIP 后解压到任意目录，双击 <code>duanjuzhijia2.exe</code> 即可运行，免安装、绿色版。想放桌面的话，右键 exe 发送快捷方式到桌面。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>手机和电脑能互相接着看吗？<span class="faq__sign"></span></summary>
+          <div class="faq__body">配置好 WebDAV 同步后就行。手机上看到第 17 集的一半，电脑打开会从同一个位置继续。两端冲突时会自动保留最新的那个进度。</div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>TV 版怎么用手机操控？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            在 TV 版里打开手机操控，电视上会显示一个二维码，用手机扫一下就连上了。
+            连上之后，<b>搜剧、选集播放、查看播放历史、继续播放</b>都能在手机上完成，
+            电视只负责放 —— 不用再拿遥控器一个字母一个字母地搜。
+            遥控器仍然可以用，扫码只是多了个更省事的选择。
+          </div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>画质增强是每个平台都有吗？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            目前只有 <b>Windows 电脑版</b>支持，手机版和 TV 版暂时没有。开启后会把实际输出分辨率往上推，
+            最高到 4K（3840 × 2160）。它依赖显卡实时逐帧计算，所以显卡偏弱、笔记本在用电池、
+            或者系统发烫时会自动退回原画 —— 宁可画面朴素，也不让播放卡顿。
+            另外播放器的画质增强是"锦上添花"，建议先在源站选高清画质再看。
+          </div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>TV 盒子版怎么找不到安装包？<span class="faq__sign"></span></summary>
+          <div class="faq__body">
+            TV 盒子版是独立维护的一条线，<b>只在确实有更新时才发布安装包</b>，所以最新版本的发布页上可能没有它。
+            可以点开<a href="https://github.com/jackherex/duanjuzhijia-down-phone/releases" target="_blank" rel="noopener">全部版本列表</a>
+            往回翻，找带 TV 包的历史版本。急着看的话，用手机版投屏到电视是更省事的选择。
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 官方群 ============ -->
+  <section class="community" id="community">
+    <div class="wrap">
+      <div class="comm reveal">
+        <div class="comm__glow" aria-hidden="true"></div>
+        <div class="comm__copy">
+          <p class="comm__eyebrow"><i>社群</i>Telegram 官方群</p>
+          <h2 class="comm__t">有问题，<br>直接进群问</h2>
+          <p class="comm__d">
+            新版本去哪下、某部剧找不着了、想反馈个 bug —— 在群里说一声就行，
+            比等邮件快得多。出新版本也会先在群里说一句。
+          </p>
+        </div>
+        <div class="comm__go">
+          <a class="btn btn--primary comm__btn" href="https://t.me/duanjuzhijia" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>
+            </svg>
+            加入官方群
+          </a>
+          <p class="comm__note">
+            t.me/duanjuzhijia
+            <span>· 需要能访问 Telegram 的网络</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 国内加速下载弹窗：点了不跳走，当场取该端最新 release 的资产，
+     每条给一个 gh-proxy 镜像直链。用原生 <dialog>，ESC 关闭和焦点陷阱都是白送的。 -->
+<dialog class="dlg" id="dlgDl" aria-labelledby="dlgDlT">
+  <div class="dlg__box">
+    <button class="dlg__x" id="dlgDlX" type="button" aria-label="关闭">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <p class="dlg__eyebrow"><i id="dlgDlTag">获取中</i></p>
+    <h3 class="dlg__t" id="dlgDlT">国内加速下载</h3>
+    <p class="dlg__sub" id="dlgDlSub">正在读取最新版本…</p>
+    <div class="dlg__body" id="dlgDlBody"></div>
+    <button class="dlg__refresh" id="dlgDlRefresh" type="button">检查是否有更新版本</button>
+    <p class="dlg__note" id="dlgDlNote">
+      「加速下载」走第三方镜像 gh-proxy.com，文件由它转发，我们不改包。
+      装不上 arm64 包的电视盒子，挑 armeabi-v7a 那个。
+    </p>
+  </div>
+</dialog>
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <div class="foot__brand">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M8.5 5.2v13.6c0 .9 1 1.4 1.7.9l10.3-6.8c.7-.4.7-1.4 0-1.8L10.2 4.3c-.7-.5-1.7 0-1.7.9Z" fill="currentColor"/>
+      </svg>
+      <span>短剧之家</span>
+    </div>
+    <nav class="foot__links">
+      <a href="#exclusive">独家功能</a>
+      <a href="#devices">三端下载</a>
+      <a href="#faq">常见问题</a>
+      <a href="webdav.html">WebDAV 教程</a>
+      <a href="https://t.me/duanjuzhijia" target="_blank" rel="noopener">官方群</a>
+    </nav>
+    <p class="foot__legal">
+      本站内容均来自互联网公开资源，仅供个人学习交流使用。<br>
+      © <span id="year"></span> 短剧之家 · 本站不存储任何视频文件
+    </p>
+  </div>
+</footer>
+
+<script src="js/app.js?v=29"></script>
+
+<!--
+  版本自检：让「改了但用户看不到」这件事自动消失
+
+  问题：GitHub Pages 给 HTML **和**带 ?v= 的资源都发 Cache-Control: max-age=600。
+  用户刷新时浏览器很可能直接吃缓存里的旧 HTML —— 而那份 HTML 指向的是
+  **旧的 ?v=N**，于是 CSS/JS 也是旧的。表现就是「明明改了却看起来没变」。
+
+  做法：用 no-store 拉一个极小的 version.json，与本页写死的 BUILD 比对。
+  不一致就带 ?_b=<build> 重新加载一次 —— 这个新 URL 不在浏览器也不在 CDN 缓存里，
+  必然取到最新。
+
+  ⚠️ 防死循环：用 sessionStorage 记下本次会话已纠正到的版本，
+     只有当「页面 BUILD ≠ 已纠正版本」时才重载，一次更新最多重载一次。
+  ⚠️ 每次改动 index.html / css / js 后，**必须同时**把 BUILD 和 version.json 的
+     build 一起 +1，否则这个自检不会生效（也不会出错，只是不生效）。
+-->
+<script>
+(function () {
+  var BUILD = 'b19';
+  var KEY = '_siteBuild';
+  try {
+    if (sessionStorage.getItem(KEY) === BUILD) return;   // 本次会话已是最新
+  } catch (e) {}
+  fetch('version.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (v) {
+      if (!v || !v.build || v.build === BUILD) return;
+      try { sessionStorage.setItem(KEY, v.build); } catch (e) {}
+      location.replace(
+        location.pathname + '?_b=' + encodeURIComponent(v.build) + location.hash);
+    })
+    .catch(function () {});                              // 拿不到就正常显示，不打扰
+})();
+</script>
+</body>
+</html>

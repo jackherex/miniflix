@@ -445,8 +445,34 @@
     DOC.body.appendChild(st);
   }
 
+  /* 主屏图标。head 里 icon-192 / apple-touch-icon 这两行是构建时注入的，
+     不是 React 渲染出来的，所以水合时会被 React 的 head 管理清掉
+     （实测：解析 head 时有 3 个 link，12 秒后只剩 React 自己那个 icon.svg）。
+     favicon 不受影响 —— 浏览器在解析 head 的那一刻就已经把图标取走了；
+     受影响的是「添加到主屏幕」，iOS/Android 是在页面稳定之后才去读 head 的。
+     所以水合完补一次，再挂个 observer 兜底（补完就不再 append，不会打转）。 */
+  var HEAD_LINKS = [
+    { rel: 'icon', href: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+    { rel: 'apple-touch-icon', href: 'apple-touch-icon.png' }
+  ];
+  function ensureIcons() {
+    var head = DOC.head;
+    if (!head) return;
+    for (var i = 0; i < HEAD_LINKS.length; i++) {
+      var d = HEAD_LINKS[i];
+      if (head.querySelector('link[rel="' + d.rel + '"][href="' + d.href + '"]')) continue;
+      var l = DOC.createElement('link');
+      for (var k in d) l.setAttribute(k, d[k]);
+      head.appendChild(l);
+    }
+  }
+
   function run() {
     ensureStyle();
+    ensureIcons();
+    if (window.MutationObserver) {
+      new MutationObserver(ensureIcons).observe(DOC.head, { childList: true });
+    }
     upgrade();
     var n = 0;
     var iv = setInterval(function () {

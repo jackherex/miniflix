@@ -299,6 +299,43 @@
     l2.textContent = rel.tag || '';
   }
 
+  /* 卡片顶部那块「体积 / 版本」是模板原来的价目表（¥12.90 / ¥29.90 / ¥49.90），
+     content.py 只换了字面量，数值一直停在 30.1 MB / 90.7 MB / 按需 + v2.0.0，
+     和真实安装包对不上（34.2 / 117.3 / 30.5，tag 也各不相同）。
+     这里按真实数据重写，写法沿用模板的两段式（大号主数字 + 小号单位）。 */
+  function shortVer(tag) {
+    var m = String(tag || '').match(/(\d+\.\d+\.\d+)/);
+    return m ? m[1] : '';
+  }
+  function setBig(p, head, tail) {
+    var a = p.children[0], b = p.children[1];
+    if (a && b) { a.textContent = head; b.textContent = tail || ''; }
+    else p.textContent = head + (tail || '');
+  }
+  function paintStats(card, meta, rel) {
+    if (!card || !rel) return;
+    var a = mainAsset(meta, rel);
+    var ps = card.querySelectorAll('p');
+    for (var i = 0; i < ps.length; i++) {
+      var label = (ps[i].textContent || '').trim();
+      if (label !== '体积' && label !== '版本') continue;
+      var val = ps[i].nextElementSibling;
+      if (!val) continue;
+      if (label === '体积') {
+        // 体积那格是「大号整数 + 小号单位」两个 span，保持排版
+        if (!a || !a.size || val.children.length < 2) continue;
+        var s = sz(a.size);                       // "34.2 MB"
+        var dot = s.indexOf('.');
+        setBig(val, dot < 0 ? s.replace(/\s.*$/, '') : s.slice(0, dot),
+          dot < 0 ? s.replace(/^\S+/, '') : s.slice(dot));
+      } else {
+        // 版本那格是纯文本（原模板是 "1024 GB" 被拆成 v2.0.0 + 空 GB）
+        var v = shortVer(rel.tag);
+        if (v) val.textContent = 'v' + v;
+      }
+    }
+  }
+
   function upgrade() {
     var anchors = [].slice.call(DOC.querySelectorAll('a[href*="duanjuzhijia-down-"]'));
     var touched = 0;
@@ -378,8 +415,10 @@
       // 5) 后台补真实版本号；失败就停在「检测最新版…」，点按钮时还有一次机会
       latest(meta).then(function (rel) {
         paintInfo(info, meta, rel);
+        paintStats(card, meta, rel);
         verify(meta, rel && rel.tag, function (fresh) {
           paintInfo(info, meta, fresh);
+          paintStats(card, meta, fresh);
         });
       });
     });

@@ -467,6 +467,61 @@
     }
   }
 
+  // ---------------------------------------------------------------- 海报墙预热
+  //
+  // 投影场景把海报拼成一张 2048×2304 的图集（setWall，最多 48 张）贴到 3D 墙上，
+  // 但触发条件是「钉住区的滚动进度 > 0.4」——也就是用户滚到墙前面那一刻，
+  // 才开始下载这 48 张（约 1.3 MB）。于是墙上先出现一片空网格，过一两秒才填满。
+  //
+  // 这里在开场动画结束后就把它们预热进缓存（并发 6，不抢首屏带宽），
+  // 滚到墙时 Q() 直接命中缓存，图集瞬间建好。只预热前 48 张——
+  // 正好是 setWall 会用到的那批，多下一张都是浪费。
+  var WARM_MAX = 48;
+  var WARM_PARALLEL = 6;
+
+  function wallUrls() {
+    var list = DOC.querySelectorAll('#library img[data-src]');
+    var out = [];
+    for (var i = 0; i < list.length && out.length < WARM_MAX; i++) {
+      var u = list[i].getAttribute('data-src');
+      if (u && out.indexOf(u) === -1) out.push(u);
+    }
+    return out;
+  }
+
+  function warmWall() {
+    var urls = wallUrls();
+    if (!urls.length) return;
+    var keep = [];        // 持引用，避免 Image 被 GC 掉导致请求中断
+    var next = 0;
+    var inflight = 0;
+    function pump() {
+      while (inflight < WARM_PARALLEL && next < urls.length) {
+        var im = new Image();
+        im.decoding = 'async';
+        inflight++;
+        keep.push(im);
+        im.onload = im.onerror = function () { inflight--; pump(); };
+        im.src = urls[next++];
+      }
+    }
+    pump();
+  }
+
+  // 开场遮罩是靠 <html> 上的 --wb-ready 收起的；等它收起后再热身，
+  // 免得跟首屏自己的 rest.jpg / 字体抢带宽。4 秒兜底（没有遮罩的降级路径）。
+  function whenIntroDone(fn) {
+    var t0 = Date.now();
+    var iv = setInterval(function () {
+      var v = '';
+      try { v = (DOC.documentElement.style.getPropertyValue('--wb-ready') || '').trim(); } catch (e) {}
+      if (v === '1' || Date.now() - t0 > 4000) {
+        clearInterval(iv);
+        setTimeout(fn, 250);
+      }
+    }, 120);
+  }
+
   function run() {
     ensureStyle();
     ensureIcons();
@@ -479,6 +534,7 @@
       upgrade();
       if (++n >= 8) clearInterval(iv);
     }, 700);
+    whenIntroDone(warmWall);
   }
 
   if (DOC.readyState === 'complete') setTimeout(run, 300);

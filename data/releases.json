@@ -5,47 +5,47 @@
   "ends": {
     "phone": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
-      "tag": "v2-app-v4.6.1-160",
-      "published": "2026-11-06T12:49:18Z",
+      "tag": "v2-app-v4.6.2-161",
+      "published": "2026-11-06T14:13:34Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.1+160-arm64-v8a.apk",
-          "size": 35573854,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.1-160/duanjuzhijia2-4.6.1%2B160-arm64-v8a.apk"
+          "name": "duanjuzhijia2-4.6.2+161-arm64-v8a.apk",
+          "size": 35592946,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.2-161/duanjuzhijia2-4.6.2%2B161-arm64-v8a.apk"
         }
       ]
     },
     "pc": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-pc",
-      "tag": "pc-app-v4.5.17-147",
-      "published": "2026-11-06T12:49:52Z",
+      "tag": "pc-app-v4.5.18-148",
+      "published": "2026-11-06T14:14:03Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.5.17+147-setup.exe",
-          "size": 89005706,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.17-147/duanjuzhijia2-4.5.17%2B147-setup.exe"
+          "name": "duanjuzhijia2-4.5.18+148-setup.exe",
+          "size": 89000219,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.18-148/duanjuzhijia2-4.5.18%2B148-setup.exe"
         },
         {
-          "name": "duanjuzhijia2-4.5.17+147-windows-x64.zip",
-          "size": 122555639,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.17-147/duanjuzhijia2-4.5.17%2B147-windows-x64.zip"
+          "name": "duanjuzhijia2-4.5.18+148-windows-x64.zip",
+          "size": 122556259,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.18-148/duanjuzhijia2-4.5.18%2B148-windows-x64.zip"
         }
       ]
     },
     "tv": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
-      "tag": "tv-app-v4.6.26-103",
-      "published": "2026-11-06T12:49:35Z",
+      "tag": "tv-app-v4.6.27-104",
+      "published": "2026-11-06T14:13:47Z",
       "assets": [
         {
-          "name": "duanjuzhijiatv-4.6.26+103-arm64-v8a.apk",
-          "size": 32513141,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.26-103/duanjuzhijiatv-4.6.26%2B103-arm64-v8a.apk"
+          "name": "duanjuzhijiatv-4.6.27+104-arm64-v8a.apk",
+          "size": 32527749,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.27-104/duanjuzhijiatv-4.6.27%2B104-arm64-v8a.apk"
         },
         {
-          "name": "duanjuzhijiatv-4.6.26+103-armeabi-v7a.apk",
-          "size": 41020313,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.26-103/duanjuzhijiatv-4.6.26%2B103-armeabi-v7a.apk"
+          "name": "duanjuzhijiatv-4.6.27+104-armeabi-v7a.apk",
+          "size": 41038129,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.27-104/duanjuzhijiatv-4.6.27%2B104-armeabi-v7a.apk"
         }
       ]
     },

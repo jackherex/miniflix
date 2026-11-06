@@ -21,10 +21,11 @@
   var MANIFEST = 'data/releases.json';
 
   /* slug 后缀 → 展示用文案。kind 用来挑「主包」（PC 那个 release 里
-     exe 和 zip 都有，卡片上给的是 zip 的体积）。 */
+     exe 和 zip 都有，卡片上给的是安装版 exe 的体积 —— 软件内在线更新用的就是它）。
+     ios: true 的那一端在弹窗里另列一段 iPhone 安装包（见 latestIos）。 */
   var ENDS = {
-    phone: { slug: 'duanjuzhijia-down-phone', name: '手机版', kind: 'APK', ext: '.apk' },
-    pc: { slug: 'duanjuzhijia-down-pc', name: '电脑版', kind: 'ZIP', ext: '.zip' },
+    phone: { slug: 'duanjuzhijia-down-phone', name: '手机版', kind: 'APK', ext: '.apk', ios: true },
+    pc: { slug: 'duanjuzhijia-down-pc', name: '电脑版', kind: 'EXE', ext: '-setup.exe' },
     tv: { slug: 'duanjuzhijia-down-tv', name: 'TV 盒子版', kind: 'APK', ext: '.apk' }
   };
   var BY_SLUG = {};
@@ -155,7 +156,7 @@
     });
   }
 
-  /* 卡片上那一行：主包体积。PC 那个 release 同时有 exe 和 zip，取 zip。 */
+  /* 卡片上那一行：主包体积。PC 那个 release 同时有 exe 和 zip，取安装版 exe。 */
   function mainAsset(meta, rel) {
     if (!rel || !rel.assets.length) return null;
     for (var i = 0; i < rel.assets.length; i++) {
@@ -163,6 +164,50 @@
       if (n.slice(-meta.ext.length) === meta.ext) return rel.assets[i];
     }
     return rel.assets[0];
+  }
+
+  // ------------------------------------------------------------ iOS 安装包
+  /* iOS 包和安卓发在同一个仓库（duanjuzhijia-down-phone），但**不是每次都打** ——
+     最新的 release 里很可能没有 .ipa。所以单独找「最近一个带 .ipa 的 release」：
+     先读清单里的 ends.ios（update_releases.py 生成），没有再去 GitHub 列表里往回找。 */
+  var IOS_NOTE = 'iPhone 安装包没有签名：用爱思助手、Sideloadly 或 AltStore 等工具，' +
+    '拿自己的 Apple ID 签名后安装。免费 Apple ID 签的大约 7 天要重签一次。';
+  function isIpa(a) { return /\.ipa$/i.test(a.name || ''); }
+  function ipaOnly(list) {
+    if (!list || !list.length) return null;
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i], raw = r.assets || [], out = [];
+      for (var j = 0; j < raw.length; j++) {
+        var a = raw[j], url = a.browser_download_url || a.downloadUrl || a.url || '';
+        var name = a.name || decodeURIComponent(url.split('/').pop() || '');
+        if (url && /\.ipa$/i.test(name)) out.push({ name: name, size: a.size || 0, url: url });
+      }
+      if (out.length) return { tag: r.tag_name || r.tag || '', assets: out };
+    }
+    return null;
+  }
+  function latestIos() {
+    var hit = cacheGet('ios');
+    if (hit) return Promise.resolve(hit);
+    var base = 'https://api.github.com/repos/jackherex/' + ENDS.phone.slug + '/releases';
+    return withTimeout(jget(MANIFEST), 4000)
+      .then(function (d) {
+        var e = d && d.ends && d.ends.ios;
+        return e ? ipaOnly([e]) : null;
+      })
+      .then(function (r) {
+        // 列表地址不能带查询串（gh-proxy 带 ?per_page 会 403，见 apiLatest）
+        return r || withTimeout(jget(PROXY + base), 8000).then(ipaOnly)
+          .then(function (x) { return x || withTimeout(jget(base), 8000).then(ipaOnly); });
+      })
+      .then(function (r) { if (r) cacheSet('ios', r); return r; });
+  }
+  function section(title) {
+    return '<div style="padding:12px 0 2px;font-size:11.5px;font-weight:600;letter-spacing:.04em;' +
+      'opacity:.6">' + esc(title) + '</div>';
+  }
+  function androidOnly(meta, rel) {
+    return meta.ios ? rel.assets.filter(function (a) { return !isIpa(a); }) : rel.assets;
   }
 
   // ------------------------------------------------------------ 弹窗
@@ -249,9 +294,24 @@
   function fill(meta, rel, prefer) {
     curMeta = meta;
     curRel = rel;
+    var list = androidOnly(meta, rel);
     tagEl.textContent = meta.name + (rel.tag ? ' · ' + rel.tag : '');
-    subEl.textContent = '共 ' + rel.assets.length + ' 个安装包，挑一个下载：';
-    bodyEl.innerHTML = rel.assets.map(function (a) { return row(a, prefer); }).join('');
+    subEl.textContent = '共 ' + list.length + ' 个安装包，挑一个下载：';
+    var rows = list.map(function (a) { return row(a, prefer); }).join('');
+    if (!meta.ios) { bodyEl.innerHTML = rows; return; }
+    bodyEl.innerHTML = section('安卓') + rows + '<div data-ios>' + section('iPhone') +
+      '<div style="padding:10px 0 12px;font-size:12px;opacity:.45">读取中…</div></div>';
+    latestIos().then(function (ios) {
+      var box = bodyEl.querySelector('[data-ios]');
+      if (!box || curMeta !== meta) return;
+      var repo = 'https://github.com/jackherex/' + meta.slug + '/releases';
+      box.innerHTML = section('iPhone' + (ios && ios.tag ? ' · ' + ios.tag : '')) +
+        (ios ? ios.assets.map(function (a) { return row(a, prefer); }).join('')
+          : '<div style="padding:10px 0;font-size:12.5px;opacity:.7">暂时没取到 iPhone 安装包，' +
+            '<a href="' + repo + '" target="_blank" rel="noopener" style="color:inherit">到发布页找带 .ipa 的版本</a>。</div>') +
+        '<div style="padding:4px 0 12px;font-size:11.5px;line-height:1.65;opacity:.55">' +
+        esc(IOS_NOTE) + '</div>';
+    });
   }
 
   function open(meta, prefer) {
@@ -279,7 +339,7 @@
         if (dlg.open && curMeta === meta) fill(meta, fresh, prefer);
       }, true, function () {
         if (dlg.open && curMeta === meta && curRel && subEl.textContent === '正在核对最新版…') {
-          subEl.textContent = '共 ' + curRel.assets.length + ' 个安装包，挑一个下载：';
+          subEl.textContent = '共 ' + androidOnly(curMeta, curRel).length + ' 个安装包，挑一个下载：';
         }
       });
     });

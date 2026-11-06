@@ -17,18 +17,18 @@
     },
     "pc": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-pc",
-      "tag": "pc-app-v4.5.15-145",
-      "published": "2026-11-06T05:29:43Z",
+      "tag": "pc-app-v4.5.16-146",
+      "published": "2026-11-06T12:15:59Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.5.15+145-setup.exe",
-          "size": 89666226,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.15-145/duanjuzhijia2-4.5.15%2B145-setup.exe"
+          "name": "duanjuzhijia2-4.5.16+146-setup.exe",
+          "size": 88996957,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.16-146/duanjuzhijia2-4.5.16%2B146-setup.exe"
         },
         {
-          "name": "duanjuzhijia2-4.5.15+145-windows-x64.zip",
-          "size": 123530498,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.15-145/duanjuzhijia2-4.5.15%2B145-windows-x64.zip"
+          "name": "duanjuzhijia2-4.5.16+146-windows-x64.zip",
+          "size": 122548110,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.16-146/duanjuzhijia2-4.5.16%2B146-windows-x64.zip"
         }
       ]
     },

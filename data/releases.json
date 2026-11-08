@@ -1,17 +1,17 @@
 {
   "_comment": "各端最新 release 的安装包清单，供下载弹窗直接读取。⚠️ 每发布一个新版本就要跑一次 build/update_releases.py，否则弹窗给的还是旧包。弹窗优先读这个文件：同站、无限流、秒开；打开弹窗时还会静默去 GitHub 核对一次 tag，发现不一致会就地更新。",
   "_update_cmd": "python build/update_releases.py",
-  "updated": "2026-11-07",
+  "updated": "2026-11-08",
   "ends": {
     "phone": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
-      "tag": "v2-app-v4.6.3-162",
-      "published": "2026-11-07T03:54:24Z",
+      "tag": "v2-app-v4.6.5-164",
+      "published": "2026-11-08T02:13:37Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.3+162-arm64-v8a.apk",
-          "size": 35746962,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.3-162/duanjuzhijia2-4.6.3%2B162-arm64-v8a.apk"
+          "name": "duanjuzhijia2-4.6.5+164-arm64-v8a.apk",
+          "size": 36826389,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.5-164/duanjuzhijia2-4.6.5%2B164-arm64-v8a.apk"
         }
       ]
     },

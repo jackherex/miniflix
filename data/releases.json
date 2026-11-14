@@ -60,6 +60,18 @@
           "url": "https://github.com/jackherex/duanjuzhijia-down-ios/releases/download/ios-app-v4.6.11-170/duanjuzhijia2-4.6.11%2B170-ios-unsigned.ipa"
         }
       ]
+    },
+    "cast": {
+      "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
+      "tag": "cast-v1.0.5-6",
+      "published": "2026-11-14T10:27:26Z",
+      "assets": [
+        {
+          "name": "duanjuzhijia-cast-1.0.5.6.apk",
+          "size": 579831,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/cast-v1.0.5-6/duanjuzhijia-cast-1.0.5.6.apk"
+        }
+      ]
     }
   }
 }

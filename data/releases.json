@@ -1,63 +1,63 @@
 {
   "_comment": "各端最新 release 的安装包清单，供下载弹窗直接读取。⚠️ 每发布一个新版本就要跑一次 build/update_releases.py，否则弹窗给的还是旧包。弹窗优先读这个文件：同站、无限流、秒开；打开弹窗时还会静默去 GitHub 核对一次 tag，发现不一致会就地更新。",
   "_update_cmd": "python build/update_releases.py",
-  "updated": "2026-11-08",
+  "updated": "2026-11-14",
   "ends": {
     "phone": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
-      "tag": "v2-app-v4.6.6-165",
-      "published": "2026-11-08T03:44:52Z",
+      "tag": "v2-app-v4.6.10-169",
+      "published": "2026-11-14T00:10:57Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.6+165-arm64-v8a.apk",
-          "size": 36826341,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.6-165/duanjuzhijia2-4.6.6%2B165-arm64-v8a.apk"
+          "name": "duanjuzhijia2-4.6.10+169-arm64-v8a.apk",
+          "size": 48340886,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.10-169/duanjuzhijia2-4.6.10%2B169-arm64-v8a.apk"
         }
       ]
     },
     "pc": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-pc",
-      "tag": "pc-app-v4.5.19-149",
-      "published": "2026-11-07T03:54:41Z",
+      "tag": "pc-app-v4.5.23-153",
+      "published": "2026-11-14T00:11:53Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.5.19+149-setup.exe",
-          "size": 89040090,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.19-149/duanjuzhijia2-4.5.19%2B149-setup.exe"
+          "name": "duanjuzhijia2-4.5.23+153-setup.exe",
+          "size": 89056896,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.23-153/duanjuzhijia2-4.5.23%2B153-setup.exe"
         },
         {
-          "name": "duanjuzhijia2-4.5.19+149-windows-x64.zip",
-          "size": 122604968,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.19-149/duanjuzhijia2-4.5.19%2B149-windows-x64.zip"
+          "name": "duanjuzhijia2-4.5.23+153-windows-x64.zip",
+          "size": 122627099,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.23-153/duanjuzhijia2-4.5.23%2B153-windows-x64.zip"
         }
       ]
     },
     "tv": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
-      "tag": "tv-app-v4.6.31-108",
-      "published": "2026-11-08T02:16:39Z",
+      "tag": "tv-app-v4.6.35-112",
+      "published": "2026-11-14T00:11:37Z",
       "assets": [
         {
-          "name": "duanjuzhijiatv-4.6.31+108-arm64-v8a.apk",
-          "size": 32706873,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.31-108/duanjuzhijiatv-4.6.31%2B108-arm64-v8a.apk"
+          "name": "duanjuzhijiatv-4.6.35+112-arm64-v8a.apk",
+          "size": 32736793,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.35-112/duanjuzhijiatv-4.6.35%2B112-arm64-v8a.apk"
         },
         {
-          "name": "duanjuzhijiatv-4.6.31+108-armeabi-v7a.apk",
-          "size": 41225937,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.31-108/duanjuzhijiatv-4.6.31%2B108-armeabi-v7a.apk"
+          "name": "duanjuzhijiatv-4.6.35+112-armeabi-v7a.apk",
+          "size": 41259297,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.35-112/duanjuzhijiatv-4.6.35%2B112-armeabi-v7a.apk"
         }
       ]
     },
     "ios": {
-      "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
-      "tag": "v2-app-v4.6.3-162",
-      "published": "2026-11-07T03:54:24Z",
+      "repo": "https://github.com/jackherex/duanjuzhijia-down-ios",
+      "tag": "ios-app-v4.6.10-169",
+      "published": "2026-11-14T00:11:28Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.3+162-ios-unsigned.ipa",
-          "size": 31829430,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.3-162/duanjuzhijia2-4.6.3%2B162-ios-unsigned.ipa"
+          "name": "duanjuzhijia2-4.6.10+169-ios-unsigned.ipa",
+          "size": 39769475,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-ios/releases/download/ios-app-v4.6.10-169/duanjuzhijia2-4.6.10%2B169-ios-unsigned.ipa"
         }
       ]
     }

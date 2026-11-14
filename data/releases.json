@@ -5,30 +5,30 @@
   "ends": {
     "phone": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
-      "tag": "v2-app-v4.6.10-169",
-      "published": "2026-11-14T00:10:57Z",
+      "tag": "v2-app-v4.6.11-170",
+      "published": "2026-11-14T06:18:13Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.10+169-arm64-v8a.apk",
-          "size": 48340886,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.10-169/duanjuzhijia2-4.6.10%2B169-arm64-v8a.apk"
+          "name": "duanjuzhijia2-4.6.11+170-arm64-v8a.apk",
+          "size": 48363262,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.11-170/duanjuzhijia2-4.6.11%2B170-arm64-v8a.apk"
         }
       ]
     },
     "pc": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-pc",
-      "tag": "pc-app-v4.5.23-153",
-      "published": "2026-11-14T00:11:53Z",
+      "tag": "pc-app-v4.5.24-154",
+      "published": "2026-11-14T06:18:45Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.5.23+153-setup.exe",
-          "size": 89056896,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.23-153/duanjuzhijia2-4.5.23%2B153-setup.exe"
+          "name": "duanjuzhijia2-4.5.24+154-setup.exe",
+          "size": 89060373,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.24-154/duanjuzhijia2-4.5.24%2B154-setup.exe"
         },
         {
-          "name": "duanjuzhijia2-4.5.23+153-windows-x64.zip",
-          "size": 122627099,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.23-153/duanjuzhijia2-4.5.23%2B153-windows-x64.zip"
+          "name": "duanjuzhijia2-4.5.24+154-windows-x64.zip",
+          "size": 122627717,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.24-154/duanjuzhijia2-4.5.24%2B154-windows-x64.zip"
         }
       ]
     },
@@ -51,13 +51,13 @@
     },
     "ios": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-ios",
-      "tag": "ios-app-v4.6.10-169",
-      "published": "2026-11-14T00:11:28Z",
+      "tag": "ios-app-v4.6.11-170",
+      "published": "2026-11-14T06:18:34Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.10+169-ios-unsigned.ipa",
-          "size": 39769475,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-ios/releases/download/ios-app-v4.6.10-169/duanjuzhijia2-4.6.10%2B169-ios-unsigned.ipa"
+          "name": "duanjuzhijia2-4.6.11+170-ios-unsigned.ipa",
+          "size": 39793243,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-ios/releases/download/ios-app-v4.6.11-170/duanjuzhijia2-4.6.11%2B170-ios-unsigned.ipa"
         }
       ]
     }

@@ -26,7 +26,9 @@
   var ENDS = {
     phone: { slug: 'duanjuzhijia-down-phone', name: '手机版', kind: 'APK', ext: '.apk', ios: true },
     pc: { slug: 'duanjuzhijia-down-pc', name: '电脑版', kind: 'EXE', ext: '-setup.exe' },
-    tv: { slug: 'duanjuzhijia-down-tv', name: 'TV 盒子版', kind: 'APK', ext: '.apk' }
+    // TV 仓库里还发「投屏端」（tag 以 cast- 开头）：TV 卡片只认 tv-app- 开头的 release，
+    // 投屏端在弹窗里另列一段（见 latestCast）。
+    tv: { slug: 'duanjuzhijia-down-tv', name: 'TV 盒子版', kind: 'APK', ext: '.apk', tagPrefix: 'tv-app-', cast: true }
   };
   var BY_SLUG = {};
   for (var k in ENDS) BY_SLUG[ENDS[k].slug] = ENDS[k];
@@ -75,10 +77,11 @@
   }
 
   /* 三种来源统一成 {tag, assets:[{name,size,url}]}；拿不到资产就当没有 */
-  function normList(list) {
+  function normList(list, prefix) {
     if (!list || !list.length) return null;
     for (var i = 0; i < list.length; i++) {
       var r = list[i];
+      if (prefix && (r.tag_name || r.tag || '').indexOf(prefix) !== 0) continue;
       var raw = r.assets || [];
       var assets = [];
       for (var j = 0; j < raw.length; j++) {
@@ -129,9 +132,10 @@
        它没有资产（TV 按需发布时常见）再退到 /releases 整份列表往回找。 */
     function tryBase(prefix) {
       return withTimeout(jget(prefix + base + '/latest'), 6000)
-        .then(function (r) { return normList(r ? [r] : null); })
+        .then(function (r) { return normList(r ? [r] : null, meta.tagPrefix); })
         .then(function (r) {
-          return r || withTimeout(jget(prefix + base), 8000).then(normList);
+          return r || withTimeout(jget(prefix + base), 8000)
+            .then(function (l) { return normList(l, meta.tagPrefix); });
         });
     }
     return tryBase(PROXY).then(function (r) { return r || tryBase(''); });
@@ -201,6 +205,26 @@
           .then(function (x) { return x || withTimeout(jget(base), 8000).then(ipaOnly); });
       })
       .then(function (r) { if (r) cacheSet('ios', r); return r; });
+  }
+  // ------------------------------------------------------------ 投屏端
+  /* 「短剧之家投屏端」：给低版本、低性能老机顶盒用（手机推送过去播），和 TV 版同一个仓库，
+     tag 以 cast- 开头。先读清单 ends.cast，没有再去 GitHub 列表里找。 */
+  var CAST_NOTE = '低性能老机顶盒用这个，最低支持安卓 4.4。装好后在手机版播放页点' +
+    '「推送到其他设备」→「推送到短剧之家投屏端」，第一次输入盒子上显示的配对码。';
+  function latestCast() {
+    var hit = cacheGet('cast');
+    if (hit) return Promise.resolve(hit);
+    var base = 'https://api.github.com/repos/jackherex/' + ENDS.tv.slug + '/releases';
+    return withTimeout(jget(MANIFEST), 4000)
+      .then(function (d) {
+        var e = d && d.ends && d.ends.cast;
+        return e ? normList([e]) : null;
+      })
+      .then(function (r) {
+        return r || withTimeout(jget(PROXY + base), 8000).then(function (l) { return normList(l, 'cast-'); })
+          .then(function (x) { return x || withTimeout(jget(base), 8000).then(function (l) { return normList(l, 'cast-'); }); });
+      })
+      .then(function (r) { if (r) cacheSet('cast', r); return r; });
   }
   function section(title) {
     return '<div style="padding:12px 0 2px;font-size:11.5px;font-weight:600;letter-spacing:.04em;' +
@@ -298,6 +322,20 @@
     tagEl.textContent = meta.name + (rel.tag ? ' · ' + rel.tag : '');
     subEl.textContent = '共 ' + list.length + ' 个安装包，挑一个下载：';
     var rows = list.map(function (a) { return row(a, prefer); }).join('');
+    if (meta.cast) {
+      bodyEl.innerHTML = section('TV 盒子版') + rows + '<div data-cast>' + section('投屏端') +
+        '<div style="padding:10px 0 12px;font-size:12px;opacity:.45">读取中…</div></div>';
+      latestCast().then(function (cast) {
+        var box = bodyEl.querySelector('[data-cast]');
+        if (!box || curMeta !== meta) return;
+        box.innerHTML = section('投屏端' + (cast && cast.tag ? ' · ' + cast.tag : '')) +
+          (cast ? cast.assets.map(function (a) { return row(a, prefer); }).join('')
+            : '<div style="padding:10px 0;font-size:12.5px;opacity:.7">暂时没取到投屏端安装包。</div>') +
+          '<div style="padding:4px 0 12px;font-size:11.5px;line-height:1.65;opacity:.55">' +
+          esc(CAST_NOTE) + '</div>';
+      });
+      return;
+    }
     if (!meta.ios) { bodyEl.innerHTML = rows; return; }
     bodyEl.innerHTML = section('安卓') + rows + '<div data-ios>' + section('iPhone') +
       '<div style="padding:10px 0 12px;font-size:12px;opacity:.45">读取中…</div></div>';

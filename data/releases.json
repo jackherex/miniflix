@@ -5,30 +5,35 @@
   "ends": {
     "phone": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
-      "tag": "v2-app-v4.6.11-170",
-      "published": "2026-11-14T06:18:13Z",
+      "tag": "v2-app-v4.6.12-171",
+      "published": "2026-11-14T15:47:48Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.11+170-arm64-v8a.apk",
-          "size": 48363262,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.11-170/duanjuzhijia2-4.6.11%2B170-arm64-v8a.apk"
+          "name": "duanjuzhijia2-4.6.12+171-arm64-v8a.apk",
+          "size": 48365390,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.12-171/duanjuzhijia2-4.6.12%2B171-arm64-v8a.apk"
         }
       ]
     },
     "pc": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-pc",
-      "tag": "pc-app-v4.5.24-154",
-      "published": "2026-11-14T06:18:45Z",
+      "tag": "pc-app-v4.5.25-155",
+      "published": "2026-11-14T15:48:00Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.5.24+154-setup.exe",
-          "size": 89060373,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.24-154/duanjuzhijia2-4.5.24%2B154-setup.exe"
+          "name": "duanjuzhijia2-4.5.25+155-setup.exe",
+          "size": 92394837,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.25-155/duanjuzhijia2-4.5.25%2B155-setup.exe"
         },
         {
-          "name": "duanjuzhijia2-4.5.24+154-windows-x64.zip",
-          "size": 122627717,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.24-154/duanjuzhijia2-4.5.24%2B154-windows-x64.zip"
+          "name": "duanjuzhijia2-4.5.25+155-windows-x64.zip",
+          "size": 127395937,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.25-155/duanjuzhijia2-4.5.25%2B155-windows-x64.zip"
+        },
+        {
+          "name": "librempeg-cb1f8f3-x264-b35605a-windows-corresponding-source.tar.gz",
+          "size": 19877371,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.25-155/librempeg-cb1f8f3-x264-b35605a-windows-corresponding-source.tar.gz"
         }
       ]
     },
@@ -63,13 +68,13 @@
     },
     "cast": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
-      "tag": "cast-v1.0.5-6",
-      "published": "2026-11-14T10:27:26Z",
+      "tag": "cast-v1.0.6-7",
+      "published": "2026-11-14T15:48:39Z",
       "assets": [
         {
-          "name": "duanjuzhijia-cast-1.0.5.6.apk",
-          "size": 579831,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/cast-v1.0.5-6/duanjuzhijia-cast-1.0.5.6.apk"
+          "name": "duanjuzhijia-cast-1.0.6.7.apk",
+          "size": 582014,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/cast-v1.0.6-7/duanjuzhijia-cast-1.0.6.7.apk"
         }
       ]
     }

@@ -1,7 +1,7 @@
 {
   "_comment": "各端最新 release 的安装包清单，供下载弹窗直接读取。⚠️ 每发布一个新版本就要跑一次 build/update_releases.py，否则弹窗给的还是旧包。弹窗优先读这个文件：同站、无限流、秒开；打开弹窗时还会静默去 GitHub 核对一次 tag，发现不一致会就地更新。",
   "_update_cmd": "python build/update_releases.py",
-  "updated": "2026-11-14",
+  "updated": "2026-11-15",
   "ends": {
     "phone": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
@@ -34,18 +34,18 @@
     },
     "tv": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
-      "tag": "tv-app-v4.6.35-112",
-      "published": "2026-11-14T00:11:37Z",
+      "tag": "tv-app-v4.6.37-114",
+      "published": "2026-11-14T16:00:10Z",
       "assets": [
         {
-          "name": "duanjuzhijiatv-4.6.35+112-arm64-v8a.apk",
-          "size": 32736793,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.35-112/duanjuzhijiatv-4.6.35%2B112-arm64-v8a.apk"
+          "name": "duanjuzhijiatv-4.6.37+114-arm64-v8a.apk",
+          "size": 32757757,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.37-114/duanjuzhijiatv-4.6.37%2B114-arm64-v8a.apk"
         },
         {
-          "name": "duanjuzhijiatv-4.6.35+112-armeabi-v7a.apk",
-          "size": 41259297,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.35-112/duanjuzhijiatv-4.6.35%2B112-armeabi-v7a.apk"
+          "name": "duanjuzhijiatv-4.6.37+114-armeabi-v7a.apk",
+          "size": 41279777,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.37-114/duanjuzhijiatv-4.6.37%2B114-armeabi-v7a.apk"
         }
       ]
     },

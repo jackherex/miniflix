@@ -23,12 +23,17 @@
   /* slug 后缀 → 展示用文案。kind 用来挑「主包」（PC 那个 release 里
      exe 和 zip 都有，卡片上给的是安装版 exe 的体积 —— 软件内在线更新用的就是它）。
      ios: true 的那一端在弹窗里另列一段 iPhone 安装包（见 latestIos）。 */
+  /* key = 清单 data/releases.json 里 ends 的键，也是缓存键（投屏端和 TV 同一个仓库，不能按仓库区分）。
+     2026-11-15 用户：苹果设备（iPhone + Apple TV）、投屏端各自单独一张卡 ——
+     原来 iPhone 藏在手机版弹窗里、投屏端藏在 TV 弹窗里，太不显眼。 */
   var ENDS = {
-    phone: { slug: 'duanjuzhijia-down-phone', name: '手机版', kind: 'APK', ext: '.apk', ios: true },
-    pc: { slug: 'duanjuzhijia-down-pc', name: '电脑版', kind: 'EXE', ext: '-setup.exe' },
-    // TV 仓库里还发「投屏端」（tag 以 cast- 开头）：TV 卡片只认 tv-app- 开头的 release，
-    // 投屏端在弹窗里另列一段（见 latestCast）。
-    tv: { slug: 'duanjuzhijia-down-tv', name: 'TV 盒子版', kind: 'APK', ext: '.apk', tagPrefix: 'tv-app-', cast: true }
+    phone: { key: 'phone', slug: 'duanjuzhijia-down-phone', name: '手机版', kind: 'APK', ext: '.apk' },
+    pc: { key: 'pc', slug: 'duanjuzhijia-down-pc', name: '电脑版', kind: 'EXE', ext: '-setup.exe' },
+    // TV 仓库里还发「投屏端」（tag 以 cast- 开头）：TV 卡片只认 tv-app- 开头的 release。
+    tv: { key: 'tv', slug: 'duanjuzhijia-down-tv', name: 'TV 盒子版', kind: 'APK', ext: '.apk', tagPrefix: 'tv-app-' },
+    // 苹果设备：卡片主包是 Apple TV（tvOS 下载仓库），弹窗里另列 iPhone（见 latestIos）。
+    apple: { key: 'tvos', slug: 'duanjuzhijia-down-tvos', name: '苹果设备', kind: 'IPA', ext: '.ipa', apple: true },
+    cast: { key: 'cast', slug: 'duanjuzhijia-down-tv', name: '投屏端', kind: 'APK', ext: '.apk', tagPrefix: 'cast-', castOnly: true }
   };
   var BY_SLUG = {};
   for (var k in ENDS) BY_SLUG[ENDS[k].slug] = ENDS[k];
@@ -102,7 +107,7 @@
 
   function fromManifest(meta) {
     return jget(MANIFEST).then(function (d) {
-      var e = d && d.ends && d.ends[meta.slug.slice('duanjuzhijia-down-'.length)];
+      var e = d && d.ends && d.ends[meta.key];
       if (!e || !e.assets || !e.assets.length) return null;
       return {
         tag: e.tag || '',
@@ -114,11 +119,11 @@
   }
 
   function latest(meta) {
-    var hit = cacheGet(meta.slug);
+    var hit = cacheGet(meta.key);
     if (hit) return Promise.resolve(hit);
     return withTimeout(fromManifest(meta), 4000)
       .then(function (m) { return m || apiLatest(meta); })
-      .then(function (r) { if (r) cacheSet(meta.slug, r); return r; });
+      .then(function (r) { if (r) cacheSet(meta.key, r); return r; });
   }
 
   /* 清单是跟着站点发出去的静态快照，发一个新版本它就过期了。
@@ -148,12 +153,12 @@
      核不到（限流/不通）就什么都不做，继续用清单里的数据，绝不打断下载。 */
   function verify(meta, shownTag, cb, force, onDone) {
     if (!force) {
-      if (verified[meta.slug]) return;
-      verified[meta.slug] = 1;
+      if (verified[meta.key]) return;
+      verified[meta.key] = 1;
     }
     apiLatest(meta).then(function (rel) {
       if (rel) {
-        cacheSet(meta.slug, rel);
+        cacheSet(meta.key, rel);
         if (!shownTag || rel.tag !== shownTag) cb(rel);
       }
       if (onDone) onDone();
@@ -209,6 +214,8 @@
   // ------------------------------------------------------------ 投屏端
   /* 「短剧之家投屏端」：给低版本、低性能老机顶盒用（手机推送过去播），和 TV 版同一个仓库，
      tag 以 cast- 开头。先读清单 ends.cast，没有再去 GitHub 列表里找。 */
+  var APPLE_TV_NOTE = 'Apple TV 版用安卓手机版里的「安装到 Apple TV」一键安装（自动签名，到期前提醒续签）；' +
+    '也可以用自己的签名工具安装这个 .ipa。';
   var CAST_NOTE = '低性能老机顶盒用这个，最低支持安卓 4.4。装好后在手机版播放页点' +
     '「推送到其他设备」→「推送到短剧之家投屏端」，第一次输入盒子上显示的配对码。';
   function latestCast() {
@@ -322,6 +329,26 @@
     tagEl.textContent = meta.name + (rel.tag ? ' · ' + rel.tag : '');
     subEl.textContent = '共 ' + list.length + ' 个安装包，挑一个下载：';
     var rows = list.map(function (a) { return row(a, prefer); }).join('');
+    if (meta.castOnly) {
+      bodyEl.innerHTML = rows + '<div style="padding:4px 0 12px;font-size:11.5px;line-height:1.65;opacity:.6">' +
+        esc(CAST_NOTE) + '</div>';
+      return;
+    }
+    if (meta.apple) {
+      bodyEl.innerHTML = section('Apple TV' + (rel.tag ? ' · ' + rel.tag : '')) + rows +
+        '<div style="padding:4px 0 12px;font-size:11.5px;line-height:1.65;opacity:.55">' + esc(APPLE_TV_NOTE) + '</div>' +
+        '<div data-ios>' + section('iPhone') +
+        '<div style="padding:10px 0 12px;font-size:12px;opacity:.45">读取中…</div></div>';
+      latestIos().then(function (ios) {
+        var box = bodyEl.querySelector('[data-ios]');
+        if (!box || curMeta !== meta) return;
+        box.innerHTML = section('iPhone' + (ios && ios.tag ? ' · ' + ios.tag : '')) +
+          (ios ? ios.assets.map(function (a) { return row(a, prefer); }).join('')
+            : '<div style="padding:10px 0;font-size:12.5px;opacity:.7">暂时没取到 iPhone 安装包。</div>') +
+          '<div style="padding:4px 0 12px;font-size:11.5px;line-height:1.65;opacity:.55">' + esc(IOS_NOTE) + '</div>';
+      });
+      return;
+    }
     if (meta.cast) {
       bodyEl.innerHTML = section('TV 盒子版') + rows + '<div data-cast>' + section('投屏端') +
         '<div style="padding:10px 0 12px;font-size:12px;opacity:.45">读取中…</div></div>';
@@ -435,6 +462,7 @@
   }
 
   function upgrade() {
+    ensureExtraCards();
     var anchors = [].slice.call(DOC.querySelectorAll('a[href*="duanjuzhijia-down-"]'));
     var touched = 0;
 
@@ -443,9 +471,14 @@
       if (a.closest('dialog')) return;
       if (a.closest('[data-wb-dl]')) return;    // 这块已经改过了
       var href = a.getAttribute('href') || '';
-      var m = href.match(/duanjuzhijia-down-(phone|pc|tv)/);
-      if (!m) return;
-      var meta = ENDS[m[1]];
+      var meta = null;
+      if (a.getAttribute('data-wb-end')) {
+        meta = ENDS[a.getAttribute('data-wb-end')];
+      } else {
+        var m = href.match(/duanjuzhijia-down-(phone|pc|tv)\//);
+        if (m) meta = ENDS[m[1]];
+      }
+      if (!meta) return;
       var foot = a.parentElement;
       if (!meta || !foot) return;
 
@@ -524,6 +557,93 @@
     return touched;
   }
 
+  /* ---------------------------------------------- 额外两张卡：苹果设备、投屏端
+     模板只有三张价格卡（手机 / 电脑 / TV）。照着 TV 卡克隆两张 —— 样式和别的卡一模一样。
+     克隆用的是 TV 卡**改造之前**的样子（第一次见到时存一份），以后水合重渲染把它们冲掉了也能再补。 */
+  var EXTRA = [
+    { end: 'apple', title: '苹果设备', tag: 'iPhone · Apple TV', format: 'IPA，iPhone 与 Apple TV 各一个包',
+      features: ['Apple TV 用手机版「安装到 Apple TV」一键安装', '自动签名，到期前提醒续签', 'iPhone 版同一个弹窗里下载',
+        '无感加载下集', '离线弹幕', 'WebDAV 同步', '预约追更'] },
+    { end: 'cast', title: '投屏端', tag: '老机顶盒专用', format: 'APK，最低安卓 4.4',
+      features: ['需要配合手机版使用：播放页「推送到其他设备」→「推送到短剧之家投屏端」',
+        '低性能老盒子也能流畅播', '弹幕、倍速、上一集 / 下一集', '自动连播下一集', '在线更新'] }
+  ];
+  var TEXT_SWAP = { title: ['TV 盒子版', 'Premium'], tag: ['大屏观影'], format: ['APK，机顶盒专用'] };
+  var tvTemplate = null;
+
+  function textNodes(root) {
+    var out = [];
+    var walker = DOC.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    while (walker.nextNode()) out.push(walker.currentNode);
+    return out;
+  }
+
+  function buildCard(spec) {
+    var card = tvTemplate.cloneNode(true);
+    card.setAttribute('data-wb-extra', spec.end);
+    textNodes(card).forEach(function (n) {
+      var t = (n.nodeValue || '').trim();
+      if (TEXT_SWAP.title.indexOf(t) >= 0) n.nodeValue = spec.title;
+      else if (TEXT_SWAP.tag.indexOf(t) >= 0) n.nodeValue = spec.tag;
+      else if (TEXT_SWAP.format.indexOf(t) >= 0) n.nodeValue = spec.format;
+    });
+    // 功能列表：找含「无感加载下集」的那个列表，按第一项的样子重排
+    var lists = card.querySelectorAll('ul, ol');
+    for (var i = 0; i < lists.length; i++) {
+      var list = lists[i];
+      if ((list.textContent || '').indexOf('无感加载下集') < 0 || !list.children.length) continue;
+      // 第一项是「安装包 · 格式」（两段文字），留着（格式已换掉）；后面的功能项按第二项的样子重排。
+      var head = list.children[0];
+      var proto = list.children[1] || head;
+      while (list.children.length > 1) list.removeChild(list.lastChild);
+      if (proto === head) list.removeChild(head);
+      spec.features.forEach(function (f) {
+        var li = proto.cloneNode(true);
+        var nodes = textNodes(li).filter(function (n) { return (n.nodeValue || '').trim(); });
+        if (nodes.length) {
+          nodes[nodes.length - 1].nodeValue = f;
+          for (var j = 0; j < nodes.length - 1; j++) nodes[j].nodeValue = '';
+        } else {
+          li.textContent = f;
+        }
+        list.appendChild(li);
+      });
+      break;
+    }
+    var link = card.querySelector('a[href*="duanjuzhijia-down-tv"]');
+    if (link) {
+      link.setAttribute('data-wb-end', spec.end);
+      link.setAttribute('href', 'https://github.com/jackherex/' + ENDS[spec.end].slug + '/releases');
+    }
+    return card;
+  }
+
+  function ensureExtraCards() {
+    var tvLink = DOC.querySelector('a[href="https://github.com/jackherex/duanjuzhijia-down-tv/releases/latest"]:not([data-wb-end])');
+    var tvCard = tvLink && tvLink.closest('li, article');
+    if (tvCard && !tvTemplate) tvTemplate = tvCard.cloneNode(true);
+    if (!tvTemplate) return;
+    if (!tvCard) {
+      var main = DOC.querySelector('[data-wb-main="duanjuzhijia-down-tv"]');
+      tvCard = main && main.closest('li, article');
+    }
+    if (!tvCard || !tvCard.parentNode) return;
+    tvCard.parentNode.setAttribute('data-wb-cards', '');
+    var after = tvCard;
+    EXTRA.forEach(function (spec) {
+      var have = tvCard.parentNode.querySelector('[data-wb-extra="' + spec.end + '"]');
+      if (!have) {
+        have = buildCard(spec);
+        tvCard.parentNode.insertBefore(have, after.nextSibling);
+      }
+      after = have;
+    });
+    // 手机版卡片：iPhone 挪到「苹果设备」了，格式那行只写安卓
+    textNodes(DOC.body).forEach(function (n) {
+      if ((n.nodeValue || '').trim() === '安卓 APK · iPhone IPA') n.nodeValue = '安卓 APK';
+    });
+  }
+
   // 水合会整树重渲染一次（本站已知 #418），改完的 DOM 可能被还原 → 复查几轮
   var STYLE_ID = 'wb-dl-style';
   function ensureStyle() {
@@ -535,6 +655,7 @@
        和旧站那张卡一致。 */
     st.textContent =
       '[data-wb-dl]{gap:10px}' +
+      '@media (min-width:1024px){[data-wb-cards]{flex-wrap:wrap;justify-content:center;row-gap:20px;overflow:visible}}' +
       '@media (max-width:430px){' +
       '[data-wb-info]>span:last-child{display:none}' +
       '[data-wb-mirror]{font-size:10px}' +

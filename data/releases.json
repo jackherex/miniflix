@@ -61,6 +61,18 @@
         }
       ]
     },
+    "tvos": {
+      "repo": "https://github.com/jackherex/duanjuzhijia-down-tvos",
+      "tag": "tvos-v1.1.9-11",
+      "published": "2026-11-14T16:05:09Z",
+      "assets": [
+        {
+          "name": "duanjuzhijia-tvos-1.1.9+11-unsigned.ipa",
+          "size": 17241517,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tvos/releases/download/tvos-v1.1.9-11/duanjuzhijia-tvos-1.1.9%2B11-unsigned.ipa"
+        }
+      ]
+    },
     "cast": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
       "tag": "cast-v1.0.6-7",

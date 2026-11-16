@@ -5,71 +5,71 @@
   "ends": {
     "phone": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-phone",
-      "tag": "v2-app-v4.6.19-186",
-      "published": "2026-11-16T07:24:18Z",
+      "tag": "v2-app-v4.6.21-189",
+      "published": "2026-11-16T11:11:19Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.19+186-arm64-v8a.apk",
-          "size": 48409478,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.19-186/duanjuzhijia2-4.6.19%2B186-arm64-v8a.apk"
+          "name": "duanjuzhijia2-4.6.21+189-arm64-v8a.apk",
+          "size": 48434278,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-phone/releases/download/v2-app-v4.6.21-189/duanjuzhijia2-4.6.21%2B189-arm64-v8a.apk"
         }
       ]
     },
     "pc": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-pc",
-      "tag": "pc-app-v4.5.31-161",
-      "published": "2026-11-16T07:11:56Z",
+      "tag": "pc-app-v4.5.32-162",
+      "published": "2026-11-16T11:04:42Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.5.31+161-setup.exe",
-          "size": 92394686,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.31-161/duanjuzhijia2-4.5.31%2B161-setup.exe"
+          "name": "duanjuzhijia2-4.5.32+162-setup.exe",
+          "size": 92427430,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.32-162/duanjuzhijia2-4.5.32%2B162-setup.exe"
         },
         {
-          "name": "duanjuzhijia2-4.5.31+161-windows-x64.zip",
-          "size": 127417728,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.31-161/duanjuzhijia2-4.5.31%2B161-windows-x64.zip"
+          "name": "duanjuzhijia2-4.5.32+162-windows-x64.zip",
+          "size": 127444155,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-pc/releases/download/pc-app-v4.5.32-162/duanjuzhijia2-4.5.32%2B162-windows-x64.zip"
         }
       ]
     },
     "tv": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tv",
-      "tag": "tv-app-v4.6.46-134",
-      "published": "2026-11-16T07:12:34Z",
+      "tag": "tv-app-v4.6.47-135",
+      "published": "2026-11-16T11:04:25Z",
       "assets": [
         {
-          "name": "duanjuzhijiatv-4.6.46+134-arm64-v8a.apk",
-          "size": 32832589,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.46-134/duanjuzhijiatv-4.6.46%2B134-arm64-v8a.apk"
+          "name": "duanjuzhijiatv-4.6.47+135-arm64-v8a.apk",
+          "size": 32857453,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.47-135/duanjuzhijiatv-4.6.47%2B135-arm64-v8a.apk"
         },
         {
-          "name": "duanjuzhijiatv-4.6.46+134-armeabi-v7a.apk",
-          "size": 41360393,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.46-134/duanjuzhijiatv-4.6.46%2B134-armeabi-v7a.apk"
+          "name": "duanjuzhijiatv-4.6.47+135-armeabi-v7a.apk",
+          "size": 41388777,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tv/releases/download/tv-app-v4.6.47-135/duanjuzhijiatv-4.6.47%2B135-armeabi-v7a.apk"
         }
       ]
     },
     "ios": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-ios",
-      "tag": "ios-app-v4.6.19-186",
-      "published": "2026-11-16T07:24:35Z",
+      "tag": "ios-app-v4.6.21-189",
+      "published": "2026-11-16T11:11:37Z",
       "assets": [
         {
-          "name": "duanjuzhijia2-4.6.19+186-ios-unsigned.ipa",
-          "size": 39845956,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-ios/releases/download/ios-app-v4.6.19-186/duanjuzhijia2-4.6.19%2B186-ios-unsigned.ipa"
+          "name": "duanjuzhijia2-4.6.21+189-ios-unsigned.ipa",
+          "size": 39872471,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-ios/releases/download/ios-app-v4.6.21-189/duanjuzhijia2-4.6.21%2B189-ios-unsigned.ipa"
         }
       ]
     },
     "tvos": {
       "repo": "https://github.com/jackherex/duanjuzhijia-down-tvos",
-      "tag": "tvos-v1.1.16-18",
-      "published": "2026-11-16T07:13:23Z",
+      "tag": "tvos-v1.1.17-19",
+      "published": "2026-11-16T11:05:55Z",
       "assets": [
         {
-          "name": "duanjuzhijia-tvos-1.1.16+18-unsigned.ipa",
-          "size": 19568175,
-          "url": "https://github.com/jackherex/duanjuzhijia-down-tvos/releases/download/tvos-v1.1.16-18/duanjuzhijia-tvos-1.1.16%2B18-unsigned.ipa"
+          "name": "duanjuzhijia-tvos-1.1.17+19-unsigned.ipa",
+          "size": 19592329,
+          "url": "https://github.com/jackherex/duanjuzhijia-down-tvos/releases/download/tvos-v1.1.17-19/duanjuzhijia-tvos-1.1.17%2B19-unsigned.ipa"
         }
       ]
     },
